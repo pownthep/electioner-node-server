@@ -1,1 +1,15 @@
-
+.mynav{
+  background-color: #ededed;
+}
+.navbar{
+  background-color: transparent !important;
+}
+.navbar a:hover{
+  transition: 0.3s;
+}
+.container{
+  text-align: center;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: black;
+}
