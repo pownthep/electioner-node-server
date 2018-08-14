@@ -1,0 +1,15 @@
+{
+  "name": "multichain_node_app",
+  "version": "1.0.0",
+  "description": "Multichain Election System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Pownthep Laokhunthot",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.18.3"
+  }
+}
