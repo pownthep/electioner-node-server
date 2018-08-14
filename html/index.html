@@ -3,50 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Welcome to Electioner</title>
-
-<!--navigation bar-->
-    <style>
-    body{
-        background-color: #ededed;
-    }
-    .nav{
-      position: relative;
-      overflow: hidden;
-    }
-    .nav a{
-      float: left;
-      color: black;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      font-size: 17px;
-    }
-    .nav a:hover{
-      background-color: #13334c;
-      color: #ededed;
-      transition: 0.3s;
-    }
-    .nav a:active{
-      background-color: #13334c;
-      color: #ededed;
-    }
-    .cen-nav{
-      float: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: sans-serif;
-    }
-    .vote{
-      float: right;
-      font-family: sans-serif;
-    }
-    </style>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/styles.css">
   </head>
-
   <body>
-
     <div class="nav">
       <div class="cen-nav">
         <a href="#home" class="active">Home</a>
@@ -55,33 +15,10 @@
         <a href="#candidates">Candidates</a>
         <a href="#about-us">About us</a>
       </div>
-
       <div class="vote">
         <a href="#vote" class="active">Vote Now</a>
       </div>
     </div>
-  </body>
-  <!--end navigation bar-->
-
-
-  <head>
-    <style>
-      .text{
-        height: 200px;
-        position: relative;
-      }
-      .text h1{
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        font-family: cursive;
-      }
-    </style>
-  </head>
-  <body>
     <div class="text">
       <h1>Welcome to Electioner<h1>
     </div>
