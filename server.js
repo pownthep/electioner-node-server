@@ -17,5 +17,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + 'html/index.html'));
 });
 
+app.get('/vote/candidates', (req, res) => {
+  res.sendFile(path.join(__dirname + '/html/candidates.html'));
+});
+
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
