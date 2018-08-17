@@ -1,3 +1,6 @@
+body{
+  background-color: #ededed;
+}
 .mynav{
   background-color: #ededed;
 }
@@ -8,8 +11,22 @@
   transition: 0.3s;
 }
 .container{
-  text-align: center;
+    text-align: center;
 }
 .navbar-default .navbar-toggle .icon-bar {
     background-color: black;
+}
+.card:hover{
+  border: black;
+  -webkit-box-shadow: -1px 9px 40px -12px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 9px 40px -12px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 9px 40px -12px rgba(0, 0, 0, alpha);
+}
+.jumbotron{
+  background-color: #ededed;
+}
+.card-img-top{
+  width: 270px;
+  height: 300px;
+  object-fit: cover;
 }
