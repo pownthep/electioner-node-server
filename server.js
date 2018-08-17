@@ -10,15 +10,22 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.use(express.static(path.join(__dirname,'public')))
-app.use(express.static(path.join(__dirname,'html')))
+
+// Load view engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + 'html/index.html'));
+  res.render('index');
 });
 
-app.get('/vote/candidates', (req, res) => {
-  res.sendFile(path.join(__dirname + '/html/candidates.html'));
+app.get('/candidates', (req, res) => {
+  res.render('candidates');
+});
+
+app.get('/about', (req, res) => {
+  res.render('about');
 });
 
 app.listen(PORT, HOST);
