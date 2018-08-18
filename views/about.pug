@@ -1,10 +1,6 @@
 extends layout
 block content
-  .jumbotron.jumbotron-fluid
-    .container
       h1.display-4 About Us
-      // Candidates
-      br
       .container-fluid
         form(action='/vote/candidates', method='POST')
           .card-deck
