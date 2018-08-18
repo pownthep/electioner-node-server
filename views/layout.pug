@@ -1,10 +1,11 @@
-html(lang='en', dir='ltr')
+html(lang='en', dir='ltr', class='animated slideInRight')
   head
   body
     meta(charset='utf-8')
     title Welcome to Electioner
     link(type='text/css', rel='stylesheet', href='css/bootstrap.min.css')
     link(type='text/css', rel='stylesheet', href='css/styles.css')
+    link(type='text/css', rel='stylesheet', href='css/animate.css')
     // navigation bar
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
@@ -29,14 +30,15 @@ html(lang='en', dir='ltr')
             a.nav-link(href='/candidates') Candidates
           li.nav-item
             a.nav-link(href='/about') About us
+          li.nav-item
+            a.nav-link(href='/test') Test
       // center
       // right
       #navbarNav.collapse.navbar-collapse.dual-collapse
         ul.navbar-nav.ml-auto
-          button.btn.btn-secondary.btn-sm(type='button') Vote Now
+          button.btn.btn-secondary.btn-sm(type='button' onclick="location.href = '/candidates'") Vote Now
       // right
     // end navigation
-    
     block content
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js', integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49', crossorigin='anonymous')

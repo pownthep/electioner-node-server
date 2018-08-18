@@ -2,6 +2,12 @@
 
 const express = require('express');
 const path = require('path');
+const multichain = require("multichain-node")({
+    port: 6758,
+    host: '178.128.27.70',
+    user: "multichainrpc",
+    pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
+});
 
 // Constants
 const PORT = 8080;
@@ -26,6 +32,21 @@ app.get('/candidates', (req, res) => {
 
 app.get('/about', (req, res) => {
   res.render('about');
+});
+
+app.get('/test', (req,res) => {
+  multichain.getInfo((err, info) => {
+    if(err){
+      res.render('test', {
+        multichain: "Unable to retrieve chain data"
+      });
+    }
+    else {
+      res.render('test', {
+        multichain: info
+      });
+    }
+  });
 });
 
 app.listen(PORT, HOST);
