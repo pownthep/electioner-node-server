@@ -1,5 +1,6 @@
 html(lang='en', dir='ltr', class='animated slideInRight')
   head
+  meta(name='viewport', content='width=device-width, initial-scale=1')
   body
     meta(charset='utf-8')
     title Welcome to Electioner
@@ -7,37 +8,35 @@ html(lang='en', dir='ltr', class='animated slideInRight')
     link(type='text/css', rel='stylesheet', href='css/styles.css')
     link(type='text/css', rel='stylesheet', href='css/animate.css')
     // navigation bar
-    nav.navbar.navbar-expand-lg.navbar-light.bg-light
-      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-      // Electioner
-      #navbarNav.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item
-            a.nav-link(href='/') Electioner
-      // center
-      #navbarNav.collapse.navbar-collapse
-        ul.navbar-nav.mx-auto
-          li.nav-item.active
-            a.nav-link(href='/')
-              | Home
-              span.sr-only (current)
-          li.nav-item
-            a.nav-link(href='#') News
-          li.nav-item
-            a.nav-link(href='#') Parties
-          li.nav-item
-            a.nav-link(href='/candidates') Candidates
-          li.nav-item
-            a.nav-link(href='/about') About us
-          li.nav-item
-            a.nav-link(href='/test') Test
-      // center
-      // right
-      #navbarNav.collapse.navbar-collapse.dual-collapse
-        ul.navbar-nav.ml-auto
-          button.btn.btn-secondary.btn-sm(type='button' onclick="location.href = '/candidates'") Vote Now
-      // right
+    .container-fluid
+      nav.navbar.navbar-light.navbar-expand-md.bg-light.justify-content-center
+    
+        // Left electioner icon
+        a.navbar-brand.mr-0(href='/')
+          img(src='https://image.flaticon.com/icons/svg/95/95375.svg', style='width:42px;height:35px;border:0;')
+          
+        // Center navbar
+        #collapsingNavbar2.navbar-collapse.collapse.justify-content-between.align-items-center.w-100
+          ul.navbar-nav.mx-auto.text-center
+            li.nav-item.active
+              a.nav-link(href='/') Home
+            li.nav-item
+              a.nav-link(href='#') News
+            li.nav-item
+              a.nav-link(href='#') Parties
+            li.nav-item
+              a.nav-link(href='/candidates') Candidates
+            li.nav-item
+              a.nav-link(href='/about') About us
+            li.nav-item
+              a.nav-link(href='/test') Blockchain
+              
+          // Left QR Vote Now
+          ul.nav.navbar-nav.flex-row.justify-content-center.flex-nowrap
+            li.nav-item
+              a.nav-link(href='#')
+                img(src='https://image.flaticon.com/icons/svg/806/806751.svg', style='width:42px;height:35px;border:0;')
+
     // end navigation
     block content
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')

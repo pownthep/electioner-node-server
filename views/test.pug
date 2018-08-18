@@ -3,36 +3,37 @@ block content
   .jumbotron.jumbotron-fluid
     .container
       h1.display-4 Blockchain
-  .table-responsive-sm
-
-    table.table.table-bordered.table-striped
-      tr
-        th(scope='col') Version
-        th(scope='col')=multichain.version
-      tr
-        th(scope='col') Node version
-        th(scope='col')=multichain.nodeversion
-      tr
-        th(scope='col') Protocal version
-        th(scope='col')=multichain.protocolversion
-      tr
-        th(scope='col') Chain name
-        th(scope='col')=multichain.chainname
-      tr
-        th(scope='col') Description
-        th(scope='col')=multichain.description
-      tr
-        th(scope='col') Port
-        th(scope='col')=multichain.port
-      tr
-        th(scope='col') Node address
-        th(scope='col')=multichain.nodeaddress
-      tr
-        th(scope='col') Blocks
-        th(scope='col')=multichain.blocks
-      tr
-        th(scope='col') Connections
-        th(scope='col')=multichain.connections
-      tr
-        th(scope='col') Balance
-        th(scope='col')=multichain.balance
+  .container-fluid
+    .row.justify-content-md-center
+      .table-responsive-sm
+        table.table.table-bordered.table-striped
+          tr
+            th(scope='col') Version
+            th(scope='col')=multichain.version
+          tr
+            th(scope='col') Node version
+            th(scope='col')=multichain.nodeversion
+          tr
+            th(scope='col') Protocal version
+            th(scope='col')=multichain.protocolversion
+          tr
+            th(scope='col') Chain name
+            th(scope='col')=multichain.chainname
+          tr
+            th(scope='col') Description
+            th(scope='col')=multichain.description
+          tr
+            th(scope='col') Port
+            th(scope='col')=multichain.port
+          tr
+            th(scope='col') Node address
+            th(scope='col')=multichain.nodeaddress
+          tr
+            th(scope='col') Blocks
+            th(scope='col')=multichain.blocks
+          tr
+            th(scope='col') Connections
+            th(scope='col')=multichain.connections
+          tr
+            th(scope='col') Balance
+            th(scope='col')=multichain.balance
