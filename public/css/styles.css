@@ -37,6 +37,23 @@ body
   height: auto;
   object-fit: cover;
 }
+<<<<<<< HEAD
+=======
+.bg-image{
+  position: absolute;
+  background-image: url("/images/1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  left: 0px;
+  top: 0px;
+  right:0px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.35;
+}
+>>>>>>> a90eb81107fa84134dd7bedf752dae2e86878c39
 .footer-index {
   position: absolute;
   right: 0;
@@ -50,6 +67,7 @@ body
      color: #000000;
      text-decoration:none;
 }
+<<<<<<< HEAD
 .navbar-light .navbar-toggler-icon {
     background-image: url("/images/down.png");
 }
@@ -65,4 +83,9 @@ body
 }
 .navbar-light .navbar-nav .nav-link:hover {
     color: #c5e5e3;
+=======
+.carousel-inner > .carousel-item > img {
+  width:640px;
+  height:360px;
+>>>>>>> a90eb81107fa84134dd7bedf752dae2e86878c39
 }
