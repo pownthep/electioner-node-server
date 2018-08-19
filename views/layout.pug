@@ -15,32 +15,35 @@ html(lang='en', dir='ltr', class='animated slideInRight')
     //script(src='js/materialize.min.js')
     // navigation bar
     .container-fluid
-      nav.navbar.navbar-light.navbar-expand-md.bg-light.justify-content-center
-    
-        // Left electioner icon
-        a.navbar-brand.mr-0(href='/')
-          img(src='https://image.flaticon.com/icons/svg/95/95375.svg', style='width:42px;height:35px;border:0;')
-          
-        // Center navbar
+      nav.navbar.navbar-light.navbar-expand-md.bg-light.justify-content-center          
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#collapsingNavbar2', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+            
+        // logo navbar    
         #collapsingNavbar2.navbar-collapse.collapse.justify-content-between.align-items-center.w-100
+          ul.nav.navbar-nav.flex-row.justify-content-center.flex-nowrap
+            li.nav-item
+              a.nav-link(href='/')
+                img(src='/images/temp-logo.png', style='width:50px;height:50px;border:0;')
+                  
+          // Center navbar        
           ul.navbar-nav.mx-auto.text-center
             li.nav-item.active
-              a.nav-link(href='/') Home
+              a.nav-link(href='/') Home                
             li.nav-item
               a.nav-link(href='#') News
             li.nav-item
               a.nav-link(href='#') Parties
             li.nav-item
-              a.nav-link(href='/candidates') Candidates
+              a.nav-link(href='/candidates') Candidates 
             li.nav-item
-              a.nav-link(href='/about') About us
-            li.nav-item
-              a.nav-link(href='/test') Blockchain
+              a.nav-link(href='/about') About
+            
               
           // Left QR Vote Now
           ul.nav.navbar-nav.flex-row.justify-content-center.flex-nowrap
             li.nav-item
               a.nav-link(href='#')
-                img(src='https://image.flaticon.com/icons/svg/806/806751.svg', style='width:42px;height:35px;border:0;')
+                img(src='/images/qr.png', style='width:50px;height:50px;border:0;')
 
       block content
