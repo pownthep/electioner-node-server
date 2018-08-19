@@ -34,6 +34,10 @@ app.get('/about', (req, res) => {
   res.render('about');
 });
 
+app.get('/slider', (req, res) => {
+  res.render('carousel');
+});
+
 app.get('/test', (req,res) => {
   multichain.getInfo((err, info) => {
     if(err){

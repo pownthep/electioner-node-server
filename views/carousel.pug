@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  h1.display-4 Candidate
+  .container-fluid
+    #carouselExampleControls.carousel.slide(data-ride='carousel' data-interval="false")
+      .carousel-inner
+        .carousel-item.active
+          img.d-block.w-100(src='images/candidate01.svg', alt='First slide')
+          h5.card-title 58130500252
+          h4.card-text Tharnandorn Sornpetch
+        .carousel-item
+          img.d-block.w-100(src='images/candidate02.svg', alt='Second slide')
+          h5.card-title 58130500252
+          h4.card-text Tharnandorn Sornpetch
+        .carousel-item
+          img.d-block.w-100(src='images/candidate03.svg', alt='Third slide')
+          h5.card-title 58130500252
+          h4.card-text Tharnandorn Sornpetch
+      a.carousel-control-prev(href='#carouselExampleControls', role='button', data-slide='prev')
+        span.carousel-control-prev-icon(aria-hidden='true')
+        span.sr-only Previous
+      a.carousel-control-next(href='#carouselExampleControls', role='button', data-slide='next')
+        span.carousel-control-next-icon(aria-hidden='true')
+        span.sr-only Next
+  h1.display-4 Party
+  .container-fluid
+    #carouselExampleControls2.carousel.slide(data-ride='carousel' data-interval="false")
+      .carousel-inner
+        .carousel-item.active
+          img.d-block.w-100(src='images/party01.png', alt='First slide')
+        .carousel-item
+          img.d-block.w-100(src='images/party02.png', alt='Second slide')
+      a.carousel-control-prev(href='#carouselExampleControls2', role='button', data-slide='prev')
+        span.carousel-control-prev-icon(aria-hidden='true')
+        span.sr-only Previous
+      a.carousel-control-next(href='#carouselExampleControls2', role='button', data-slide='next')
+        span.carousel-control-next-icon(aria-hidden='true')
+        span.sr-only Next

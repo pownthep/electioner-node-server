@@ -40,7 +40,6 @@ body
   height: auto;
   object-fit: cover;
 }
-
 .bg-image{
   position: absolute;
   background-image: url("/images/1.jpg");
@@ -67,4 +66,8 @@ body
 .navbar-nav{
      color: #000000;
      text-decoration:none;
+}
+.carousel-inner > .carousel-item > img {
+  width:640px;
+  height:360px;
 }
