@@ -2,33 +2,9 @@ extends layout
 block content
   h1.display-4 Candidates
   .container-fluid
-    form(action='/vote/candidates', method='POST')
-      .card-deck
-        .card.text-center
-          img.card-img-top(src='images/candidate01.svg', alt='Card image cap')
-          .card-body
-            h5.card-title 58130500252
-            h4.card-text Tharnandorn Sornpetch
-            .btn-group-toggle(data-toggle='buttons')
-              label.btn.btn-primary
-                input#option1(type='radio', name='candidate', value='BEST',autocomplete='off')
-                |  SELECT
-
-        .card.text-center
-          img.card-img-top(src='images/candidate02.svg', alt='Card image cap')
-          .card-body
-            h5.card-title 58130500209
-            h4.card-text Chairat Wimolrat
-            .btn-group-toggle(data-toggle='buttons')
-              label.btn.btn-primary
-                input#option2(type='radio', name='candidate', value='TUM',autocomplete='off')
-                |  SELECT
-        .card.text-center
-          img.card-img-top(src='images/candidate03.svg', alt='Card image cap')
-          .card-body
-            h5.card-title 58130500236
-            h4.card-text Pownthep Laokunthot
-            .btn-group-toggle(data-toggle='buttons')
-              label.btn.btn-primary
-                input#option3(type='radio', name='candidate', value='TOEY', autocomplete='off')
-                |  SELECT             
+    form(action='/vote', method='POST')
+      #form-group
+        label body:
+        textarea.form-control(name='body')
+      br
+      input.btn.btn-primary(type='submit', value='Submit')            
