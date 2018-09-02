@@ -96,6 +96,9 @@ body{
   background-color: #005792;
   border-color: #005792;
 }
+.btn-primary input:checked{
+  background-color: #000;
+}
 .card{
   border-radius: 3px;
   border-color: #ededed;
