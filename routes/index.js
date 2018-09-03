@@ -19,11 +19,6 @@ router.get('/about', (req, res) => {
   res.render('about');
 });
 
-//Test slider route
-router.get('/slider', (req, res) => {
-  res.render('carousel');
-});
-
 // Test multichain connection
 router.get('/multichain', (req,res) => {
   multichain.getInfo((err, info) => {

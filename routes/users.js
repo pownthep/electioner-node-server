@@ -88,8 +88,12 @@ router.get('/logout', function (req, res) {
 });
 //Candidate info route
 router.get('/candidates', ensureAuthenticated, (req, res) => {
-    res.render('candidates');
-  });
+  res.render('candidates');
+	});
+	
+router.post('/vote', ensureAuthenticated, (req, res) => {
+	console.log(req.body.candidate);
+});
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
