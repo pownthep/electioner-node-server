@@ -53,7 +53,8 @@ app.use(cookieParser());
 app.use(session({
   secret: 'secret',
   saveUninitialized: true,
-  resave: true
+  resave: true,
+  cookie: { maxAge: 10000 }
 }));
 
 // Passport init

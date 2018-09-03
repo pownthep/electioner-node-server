@@ -36,10 +36,9 @@ html(lang='en', dir='ltr')
               a.nav-link(href='/about') About                
             li.nav-item
               a.nav-link(href='/multichain') Blockchain
-            li.nav-item
-              a.nav-link(href='/users/login') Login
-            li.nav-item
-              a.nav-link(href='/users/logout') Logout
+            if login
+              li.nav-item
+                a.nav-link(href='/users/logout') Logout
 
               
           // Left QR Vote Now

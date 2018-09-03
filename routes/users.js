@@ -79,20 +79,20 @@ router.post('/login',
 		res.redirect('/users/candidates');
 	});
 
-router.get('/logout', function (req, res) {
-	req.logout();
-
-	req.flash('success_msg', 'You are logged out');
-
-	res.redirect('/users/login');
-});
 //Candidate info route
 router.get('/candidates', ensureAuthenticated, (req, res) => {
-  res.render('candidates');
+	res.render('candidates', {
+		login: true
 	});
-	
+});
+
+router.get('/logout', (req, res) => {
+	req.logout();
+  res.redirect('/');
+});
+
 router.post('/vote', ensureAuthenticated, (req, res) => {
-	console.log(req.body.candidate);
+	console.log(req.body.candidate)
 });
 
 function ensureAuthenticated(req, res, next){

@@ -11,7 +11,9 @@ const multichain = require("multichain-node")({
 
 // Get Homepage
 router.get('/', (req, res) => {
-  res.render('index');
+  res.render('index',{
+	  login: false
+  });
 });
 
 // About us route

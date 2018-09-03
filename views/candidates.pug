@@ -1,6 +1,9 @@
 extends layout
 block content
   script(src="/js/card_delete.js")
+  script(src="/js/timer.js")
+  .container
+    h1.display-4#time
   #div01.container
     h1.display-4 Candidates
     form(action='/users/vote', method='POST')
