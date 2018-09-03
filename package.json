@@ -4,7 +4,7 @@
   "description": "Multichain Election System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Pownthep Laokhunthot",
   "license": "ISC",
@@ -13,6 +13,16 @@
     "express": "^4.16.3",
     "mongoose": "^5.2.12",
     "multichain-node": "^2.2.0-version1.0.4",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mongodb": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "bcryptjs": "*"
   }
 }

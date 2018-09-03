@@ -2,30 +2,34 @@
 
 const express = require('express');
 const path = require('path');
-//const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const mongoose = require('mongoose');
 
-//mongoose.connect('mongodb://electioner:electioner@206.189.83.23:27017/test')
-const multichain = require("multichain-node")({
-    port: 6758,
-    host: '178.128.27.70',
-    user: "multichainrpc",
-    pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
-});
+mongoose.connect('mongodb://admin:2118a6r4@178.128.121.104/electioner')
+//mongoose.connect('mongodb://localhost/electioner')
+const db = mongoose.connection;
 
 // Check connection
-/*db.once('open', function(){
+db.once('open', function(){
   console.log('Connected to MongoDB');
 });
 
 // Check for DB errors
 db.on('error', function(err){
   console.log(err);
-});*/
+});
 
 // Constants
-const PORT = 8080;
+const PORT = 80;
 const HOST = '0.0.0.0';
+
+const routes = require('./routes/index');
+const users = require('./routes/users');
 
 // App
 const app = express();
@@ -43,45 +47,51 @@ app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended:false}));
 // Parse application/json
 app.use(bodyParser.json());
+app.use(cookieParser());
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+// Express session middleware
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
+}));
 
-app.get('/candidates', (req, res) => {
-  res.render('candidates');
-});
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/about', (req, res) => {
-  res.render('about');
-});
+// Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
 
-app.get('/slider', (req, res) => {
-  res.render('carousel');
-});
-
-app.get('/test', (req,res) => {
-  multichain.getInfo((err, info) => {
-    if(err){
-      res.render('test', {
-        multichain: "Unable to retrieve chain data"
-      });
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
     }
-    else {
-      res.render('test', {
-        multichain: info
-      });
-    }
-  });
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+// Connect flash middleware
+app.use(flash());
+
+// Global Vars
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
 });
 
-// Post route
-app.post('/vote', (req, res) => {
-  let temp = req.body.body;
-  res.render('test_vote'), {
-    text: temp
-  };
-})
+app.use('/', routes);
+app.use('/users', users);
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

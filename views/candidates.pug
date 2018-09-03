@@ -1,11 +1,11 @@
 extends layout
 block content
-  h1.display-4 Candidates
+  h1.display-4 #{key}
   .container-fluid
     form(action='/vote', method='POST')
       .card-deck
         .card.text-center
-          img.card-img-top(src='images/candidate01.svg', alt='Card image cap')
+          img.card-img-top(src='/images/candidate01.svg', alt='Card image cap')
           .card-body
             h5.card-title 58130500252
             h4.card-text Tharnandorn Sornpetch
@@ -15,7 +15,7 @@ block content
                 |  SELECT
 
         .card.text-center
-          img.card-img-top(src='images/candidate02.svg', alt='Card image cap')
+          img.card-img-top(src='/images/candidate02.svg', alt='Card image cap')
           .card-body
             h5.card-title 58130500209
             h4.card-text Chairat Wimolrat
@@ -24,7 +24,7 @@ block content
                 input#option2(type='radio', name='candidate', value='TUM',autocomplete='off')
                 |  SELECT
         .card.text-center
-          img.card-img-top(src='images/candidate03.svg', alt='Card image cap')
+          img.card-img-top(src='/images/candidate03.svg', alt='Card image cap')
           .card-body
             h5.card-title 58130500236
             h4.card-text Pownthep Laokunthot
