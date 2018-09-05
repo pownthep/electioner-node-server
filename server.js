@@ -25,7 +25,7 @@ db.on('error', function(err){
 });
 
 // Constants
-const PORT = 8080;
+const PORT = 80;
 const HOST = '0.0.0.0';
 
 const routes = require('./routes/index');

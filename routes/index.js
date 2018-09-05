@@ -7,13 +7,16 @@ const router = express.Router();
 // Get Homepage
 router.get('/', (req, res) => {
   res.render('index',{
-	  login: false
+    login: false,
+    name: 'home'
   });
 });
 
 // About us route
 router.get('/about', (req, res) => {
-  res.render('about');
+  res.render('about', {
+    name: "about"
+  });
 });
 
 

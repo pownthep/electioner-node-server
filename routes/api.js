@@ -19,7 +19,8 @@ router.get('/multichain', (req,res) => {
         }
         else {
         res.render('multichain', {
-            multichain: info
+            multichain: info,
+            name: "blockchain"
         });
         }
     });
