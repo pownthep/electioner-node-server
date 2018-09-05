@@ -25,11 +25,12 @@ db.on('error', function(err){
 });
 
 // Constants
-const PORT = 80;
+const PORT = 8080;
 const HOST = '0.0.0.0';
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
+const api = require('./routes/api');
 
 // App
 const app = express();
@@ -93,6 +94,7 @@ app.use(function (req, res, next) {
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/api', api);
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
