@@ -5,6 +5,12 @@ const router = express.Router();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+const multichain = require("multichain-node")({
+	port: 6758,
+	host: '178.128.27.70',
+	user: "multichainrpc",
+	pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
+});
 
 // Register get route
 router.get('/register', (req, res) => {
@@ -92,7 +98,11 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/vote', ensureAuthenticated, (req, res) => {
-	console.log(req.body.candidate)
+	multichain.sendAssetFrom({from: '186wWemFogZ725eMXYLjvUSAPo88P9she3hduh', to: '16Qmnk7jhbn7J35VVArfk1fE4dv9XiayvBPaBR', asset: "GBP", qty: 1}, (err, tx) => {
+		if(err) console.log(err);
+		console.log(tx);
+		res.redirect('/users/logout');
+})
 });
 
 function ensureAuthenticated(req, res, next){
