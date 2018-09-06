@@ -5,7 +5,8 @@ block content
         form(action='/users/login', method='POST')
             h4 Login
             .form-group
-                input(name="username" placeholder='Username' type="text")
+                input(name="username" placeholder='Username' type="text" value=id)
             .form-group
-                input(name="password" placeholder='Password' type="password")
+                input(name="password" placeholder='Password' type="password" value=password)
             button.btn.btn-primary(type='submit') Login
+            

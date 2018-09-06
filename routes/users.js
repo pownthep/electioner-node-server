@@ -92,7 +92,7 @@ router.get('/candidates', ensureAuthenticated, (req, res) => {
 	});
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', ensureAuthenticated, (req, res) => {
 	req.logout();
   res.redirect('/');
 });
@@ -102,7 +102,15 @@ router.post('/vote', ensureAuthenticated, (req, res) => {
 		if(err) console.log(err);
 		console.log(tx);
 		res.redirect('/users/logout');
-})
+	});
+});
+
+router.get('/login/:id/:password', (req, res) => {
+	res.render('login', {
+		notFilled:true,
+		id: req.params.id,
+		password: req.params.password
+	})
 });
 
 function ensureAuthenticated(req, res, next){
@@ -113,5 +121,6 @@ function ensureAuthenticated(req, res, next){
 		res.redirect('/users/login');
 	}
 }
+
 
 module.exports = router;
