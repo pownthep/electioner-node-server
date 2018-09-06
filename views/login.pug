@@ -3,10 +3,9 @@ extends layout
 block content
     .container(class='animated slideInRight')
         form(action='/users/login', method='POST')
+            h4 Login
             .form-group
-                label Username:
-                input.form-control(name="username" placeholder='Username' type="text")
+                input(name="username" placeholder='Username' type="text")
             .form-group
-                label Password:
-                input.form-control(name="password" placeholder='Password' type="password")
+                input(name="password" placeholder='Password' type="password")
             button.btn.btn-primary(type='submit') Login
