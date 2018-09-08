@@ -19,7 +19,9 @@ router.get('/about', (req, res) => {
   });
 });
 
-
+router.get('/result', (req,res) => {
+  res.render('graph');
+});
 
 
 module.exports = router;

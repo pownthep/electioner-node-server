@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    .container
+        each article in response.articles
+            h5=article.title
+            h5=article.description
+            br

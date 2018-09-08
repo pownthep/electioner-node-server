@@ -2,6 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('1d6ffffb59a8449280549905550de6f8');
 const multichain = require("multichain-node")({
     port: 6758,
     host: '178.128.27.70',
@@ -27,11 +29,8 @@ router.get('/multichain', (req,res) => {
 });
 
 // Create key pairs api
-router.get('/createkeypairs', (req, res) => {
-    multichain.createKeyPairs({"count": 2},(err, keyPair) => {
-        console.log(keyPair);
-    
-    });
+router.get('/config', (req, res) => {
+    res.render('config');
 });
 
 // Get address api
@@ -44,6 +43,27 @@ router.get('/getaddresses', (req, res) => {
     });
 });
 
+router.get('/news', (req,res) => {
+    newsapi.v2.topHeadlines({
+        country: 'us'
+      }).then(response => {
+        res.render('news', {
+            response: response
+        });
+      }, function(err) {
+          console.log('KUY');
+      });
+    /*var url = 'https://newsapi.org/v2/top-headlines?' +
+          'country=us&' +
+          'apiKey=1d6ffffb59a8449280549905550de6f8';
+    var req = new Request(url);
+    fetch(req)
+        .then(function(response) {
+            res.render('news', {
+                data: response.json()
+            })
+        })*/
+})
 
 
 

@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var particles = Particles.init({
-        maxParticles: 20,
+        maxParticles: 50,
         selector: '.background',
         color: ['#005792', '#c5e5e3'],
         connectParticles: true,

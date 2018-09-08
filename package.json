@@ -20,6 +20,7 @@
     "mongodb": "*",
     "mongoose": "^5.2.12",
     "multichain-node": "^2.2.0-version1.0.4",
+    "newsapi": "^2.3.0",
     "npm": "^6.4.1",
     "passport": "*",
     "passport-http": "*",

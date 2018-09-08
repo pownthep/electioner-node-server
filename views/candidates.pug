@@ -5,8 +5,7 @@ block content
   .container
     h1.display-4#time
   #div01.container
-    h1.display-4 Candidates
-    form(action='/users/vote', method='POST')
+    h1.display-4 Candidate
     #div02.card-deck
       #card01.card(class='animated slideInRight')
         img.card-img-top(src='/images/c03.jpg', alt='Card image cap')
@@ -44,6 +43,7 @@ block content
         .card-body.text-center
           h5.card-title Xing
     br
-    input#candidateId(type='hidden', name='candidate', value='3487')
-    input#partyId(type='hidden', name='party', value='3487')
-    button#btn03.btn.btn-primary(type='submit') Next       
+    form(action='/users/vote', method='POST')
+      input#candidateId(type='hidden', name='candidate', value='3487')
+      input#partyId(type='hidden', name='party', value='3487')
+      button#btn03.btn.btn-primary(type='submit') Next       
