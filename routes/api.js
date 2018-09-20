@@ -2,69 +2,53 @@
 
 const express = require('express');
 const router = express.Router();
-const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI('1d6ffffb59a8449280549905550de6f8');
-const multichain = require("multichain-node")({
-    port: 6758,
-    host: '178.128.27.70',
-    user: "multichainrpc",
-    pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
-});
+const Rep = require('../models/representative');
+const Party = require('../models/party');
+const bodyParser = require('body-parser');
 
-// Test multichain connection
-router.get('/multichain', (req,res) => {
-    multichain.getInfo((err, info) => {
-        if(err){
-        res.render('multichain', {
-            multichain: "Unable to retrieve chain data"
-        });
+router.post('/add_rep', (req,res) => {
+    var newRep = new Rep(
+        {
+            fname : req.body.fname,
+            lname : req.body.lname,
+            party : req.body.party,
+            area : req.body.code,
+            province : req.body.province,
+            district : req.body.district,
+            sub_district :req.body.sub_district,
+            url : req.body.image_url2,
+            key : req.body.key
         }
-        else {
-        res.render('multichain', {
-            multichain: info,
-            name: "blockchain"
-        });
-        }
-    });
-});
-
-// Create key pairs api
-router.get('/config', (req, res) => {
-    res.render('config');
-});
-
-// Get address api
-router.get('/getaddresses', (req, res) => {
-    multichain.getAddresses((err, addresses) => {
+    );
+    newRep.save((err) => {
         if(err) console.log(err);
-        res.render('addresses', {
-            addresses: addresses
-        });
+        else console.log("Successful saved");
     });
 });
 
-router.get('/news', (req,res) => {
-    newsapi.v2.topHeadlines({
-        country: 'us'
-      }).then(response => {
-        res.render('news', {
-            response: response
-        });
-      }, function(err) {
-          console.log('KUY');
-      });
-    /*var url = 'https://newsapi.org/v2/top-headlines?' +
-          'country=us&' +
-          'apiKey=1d6ffffb59a8449280549905550de6f8';
-    var req = new Request(url);
-    fetch(req)
-        .then(function(response) {
-            res.render('news', {
-                data: response.json()
-            })
-        })*/
-})
+router.post('/add_party', (req,res) => {
+    var newParty = new Party({
+        name: req.body.party_name,
+        code: req.body.code,
+        url: req.body.image_url}
+    );
+    newParty.save((err) => {
+        if(err) console.log(err);
+        else console.log("Successful saved");
+    });
+});
 
+router.get('/rep', (req,res) => {
+    Rep.getReps(function(err, reps){
+        if(err) console.log(err);
+        else res.json(reps);
+    })
+});
 
-
+router.get('/party', (req,res) => {
+    Party.getParties(function(err, parties){
+        if(err) console.log(err);
+        else res.json(parties);
+    })
+});
 module.exports = router;

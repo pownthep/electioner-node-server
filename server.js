@@ -9,9 +9,12 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
+
 
 mongoose.connect('mongodb://admin:2118a6r4@178.128.121.104/electioner')
-//mongoose.connect('mongodb://localhost/electioner')
 const db = mongoose.connection;
 
 // Check connection
@@ -25,15 +28,26 @@ db.on('error', function(err){
 });
 
 // Constants
-const PORT = 8080;
 const HOST = '0.0.0.0';
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
 const api = require('./routes/api');
+const multichain = require('./routes/multichain');
 
 // App
+const options = {
+  key: fs.readFileSync( './localhost.key' ),
+  cert: fs.readFileSync( './localhost.cert' ),
+  requestCert: false,
+  rejectUnauthorized: false
+};
+
 const app = express();
+const port = process.env.PORT || 443;
+const server = https.createServer( options, app );
+
+app.use(cors())
 app.use(express.static(path.join(__dirname,'public')))
 
 // Bring in Models
@@ -94,6 +108,9 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
+app.use('/multichain', multichain);
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+//app.listen(PORT, HOST);
+server.listen( port, function () {
+  console.log( 'Express server listening on port ' + server.address().port );
+} );
