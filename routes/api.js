@@ -17,7 +17,7 @@ router.post('/add_rep', (req,res) => {
             district : req.body.district,
             sub_district :req.body.sub_district,
             url : req.body.image_url2,
-            key : req.body.key
+            key : req.body.pub_key
         }
     );
     newRep.save((err) => {
