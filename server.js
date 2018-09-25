@@ -33,6 +33,7 @@ const HOST = '0.0.0.0';
 const routes = require('./routes/index');
 const users = require('./routes/users');
 const api = require('./routes/api');
+const upload = require('./routes/upload');
 const multichain = require('./routes/multichain');
 
 // App
@@ -47,8 +48,13 @@ const app = express();
 const port = process.env.PORT || 443;
 const server = https.createServer( options, app );
 
-app.use(cors())
-app.use(express.static(path.join(__dirname,'public')))
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+app.use(express.static(path.join(__dirname,'public')));
 
 // Bring in Models
 //let user = require('./models/user');
@@ -109,6 +115,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
+app.post('/upload', upload);
 
 //app.listen(PORT, HOST);
 server.listen( port, function () {

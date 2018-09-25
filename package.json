@@ -18,6 +18,7 @@
     "express-messages": "*",
     "express-session": "*",
     "express-validator": "*",
+    "formidable": "^1.2.1",
     "mongodb": "*",
     "mongoose": "^5.2.12",
     "multichain-node": "^2.2.0-version1.0.4",

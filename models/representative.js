@@ -10,6 +10,10 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  number: {
+    type: Number,
+    required: true
+  },
   party: {
     type: String,
     required: true
@@ -26,15 +30,7 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  sub_district: {
-    type: String,
-    required: true
-  },
-  url: {
-    type: String,
-    required: true
-  },
-  key: {
+  image: {
     type: String,
     required: true
   }
