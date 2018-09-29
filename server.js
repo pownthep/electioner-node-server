@@ -13,8 +13,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
-
-mongoose.connect('mongodb://admin:2118a6r4@178.128.121.104/electioner')
+mongoose.connect('mongodb://electioner:A@?GAfa#xhY2B2wN2hTVz2t@35.185.190.211/electioner')
 const db = mongoose.connection;
 
 // Check connection
@@ -33,7 +32,6 @@ const HOST = '0.0.0.0';
 const routes = require('./routes/index');
 const users = require('./routes/users');
 const api = require('./routes/api');
-const upload = require('./routes/upload');
 const multichain = require('./routes/multichain');
 
 // App
@@ -54,14 +52,9 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.static(path.join(__dirname,'public')));
 
 // Bring in Models
 //let user = require('./models/user');
-
-// Load view engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 
 // Body Parser Middleware
 // Parse application/x-www-form-urlencoded
@@ -112,10 +105,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
-app.post('/upload', upload);
 
 //app.listen(PORT, HOST);
 server.listen( port, function () {

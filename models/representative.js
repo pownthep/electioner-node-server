@@ -10,6 +10,10 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  age: {
+    type: Number,
+    required: true
+  },
   number: {
     type: Number,
     required: true

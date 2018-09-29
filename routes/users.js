@@ -80,24 +80,24 @@ router.post('/login',
 	});
 
 //Candidate info route
-router.get('/candidates', ensureAuthenticated, (req, res) => {
+/*router.get('/candidates', ensureAuthenticated, (req, res) => {
 	res.render('candidates', {
 		login: true
 	});
-});
+});*/
 
 router.get('/logout', ensureAuthenticated, (req, res) => {
 	req.logout();
   res.redirect('/');
 });
 
-router.get('/login/:id/:password', (req, res) => {
+/*router.get('/login/:id/:password', (req, res) => {
 	res.render('login', {
 		notFilled:true,
 		id: req.params.id,
 		password: req.params.password
 	})
-});
+});*/
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
