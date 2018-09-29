@@ -13,7 +13,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
-mongoose.connect('mongodb://electioner:A@?GAfa#xhY2B2wN2hTVz2t@35.185.190.211/electioner')
+mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
 const db = mongoose.connection;
 
 // Check connection
@@ -105,7 +105,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', routes);
-//app.use('/users', users);
+app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 

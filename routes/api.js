@@ -136,7 +136,7 @@ router.post('/rep/edit/:id', function(req,res){
     Rep.updateOne(query, newRep, function(err, rep){
         if(err){
             console.log(err);
-            res.send("Error");
+            res.json(err);
         }
         else {
             res.json(rep);
@@ -157,7 +157,7 @@ router.post('/party/edit/:id', function(req,res){
     Party.updateOne(query, newParty, function(err, party){
         if(err){
             console.log(err);
-            res.send("Error");
+            res.json(err);
         }
         else {
             res.json(party);

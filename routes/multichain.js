@@ -11,7 +11,6 @@ const multichain = require("multichain-node")({
 });
 const fs = require('fs');
 const crypto = require('crypto');
-//let publicKey = fs.readFileSync( './localhost.cert' );
 
 const priv_key = '';
 
@@ -22,52 +21,55 @@ router.post('/setkeys', (req,res) => {
 
 // Get address api
 router.get('/getaddresses', (req, res) => {
-    multichain.getAddresses((err, addresses) => {
-        if(err) console.log(err);
-        res.json(addresses);
+    multichain.getAddresses((err, response) => {
+        if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
     });
 });
 
 // Test multichain connection
 router.get('/multichain', (req,res) => {
     multichain.getInfo((err, info) => {
-        if(err){
-            res.render('multichain', {
-                multichain: "Unable to retrieve chain data"
-            });
-        }
-        else {
-            res.json(info);
-        }
+        if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
     });
-});
-
-// Vote route
-router.post('/vote', (req, res) => {
-	multichain.sendAssetFrom({from: '186wWemFogZ725eMXYLjvUSAPo88P9she3hduh', to: '16Qmnk7jhbn7J35VVArfk1fE4dv9XiayvBPaBR', asset: "GBP", qty: 1}, (err, tx) => {
-		if(err) console.log(err);
-		console.log(tx);
-		res.redirect('/users/logout');
-	});
 });
 
 // List stream
 router.get('/liststreams', (req, res) => {
 	multichain.listStreams((err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
     })
 });
-//
-//"privkey: 'VFHUJDeGAbhPhNpCFmKDkn23Kq2vt6f9KwHHmbViBkxYL7F7Fr7an7BH'"
+
 // List stream items
 router.get('/liststreamitems/:id', (req, res) => {
-	console.log(req.params.id);
 	multichain.listStreamItems({
 		stream: req.params.id
 	}, (err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -77,8 +79,13 @@ router.get('/listassettransaction/:id', (req, res) => {
 	multichain.listAssetTransactions({
 		asset: req.params.id
 	}, (err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -95,8 +102,13 @@ router.get('/publish/:id', (req, res) => {
 		key: "key",
 		data: message
 	}, (err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -108,8 +120,13 @@ router.post('/publish', (req, res) => {
         key: req.body.key,
         data: req.body.data
 	}, (err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -121,8 +138,13 @@ router.get('/publish/:id', (req, res) => {
         key: "key",
         data: "data"
 	}, (err, response) => {
-		if(err) console.log(err);
-		res.json(response);
+		if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -131,9 +153,13 @@ router.get('/createkey', (req, res) => {
 	multichain.createKeyPairs({
         count: 1
 	}, (err, response) => {
-        if(err) console.log(err);
-        console.log(response);
-		res.json(response);
+        if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
@@ -142,9 +168,13 @@ router.get('/grant', (req, res) => {
 	multichain.grant({
         addresses: 1
 	}, (err, response) => {
-        if(err) console.log(err);
-        console.log(response);
-		res.json(response);
+        if(err) {
+			res.json(err);
+			console.log(err);
+		}
+		else {
+			res.json(response);
+		}
 	})
 });
 
