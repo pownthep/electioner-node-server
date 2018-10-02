@@ -28,9 +28,7 @@ router.post('/register', (req, res) => {
     let errors = req.validationErrors();
   
     if(errors) {
-      res.render('register',{
-        errors:errors
-      });
+      res.json(errors);
     }
     else {
       let newUser = new User({
@@ -40,7 +38,7 @@ router.post('/register', (req, res) => {
       User.createUser(newUser, (err, user) => {
         if(err) throw err;
       })
-      res.redirect('/users/login');
+      res.json('OK!');
     }
   });
 
@@ -74,11 +72,16 @@ passport.deserializeUser(function (id, done) {
 });
 
 router.post('/login',
-	passport.authenticate('local', { successRedirect: '/users/candidates', failureRedirect: '/users/login', failureFlash: true }),
+	passport.authenticate('local', {  }),
 	function (req, res) {
-		res.redirect('/users/candidates');
+		res.json("KUY");
 	});
-
+/*
+router.post('/login', (req, res) => {
+	console.log(req.body);
+	res.json("OK");
+})
+*/
 //Candidate info route
 /*router.get('/candidates', ensureAuthenticated, (req, res) => {
 	res.render('candidates', {

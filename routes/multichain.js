@@ -13,6 +13,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const priv_key = '';
+const publicKey = fs.readFileSync( './localhost.cert' );
 
 router.post('/setkeys', (req,res) => {
     pub_key = req.body.key;
@@ -92,7 +93,7 @@ router.get('/listassettransaction/:id', (req, res) => {
 router.get('/publish/:id', (req, res) => {
 	let buffer = new Buffer("Kuy");
 	let encrypted = crypto.publicEncrypt(publicKey, buffer);
-	let message = (encrypted.toString("hex"));;
+	let message = (encrypted.toString("hex"));
 	console.log(message);
 	console.log(encrypted);
 	console.log(req.params.id);
@@ -114,11 +115,15 @@ router.get('/publish/:id', (req, res) => {
 
 // publishFrom: ["from", "stream", "key", "data"]
 router.post('/publish', (req, res) => {
-	multichain.publishFrom({
-        from: req.body.from,
+	console.log(req.body);
+	let buffer = new Buffer(req.body.data);
+	let encrypted = crypto.publicEncrypt(publicKey, buffer);
+	let message = (encrypted.toString("hex"));
+	console.log(message);
+	multichain.publish({
         stream: req.body.stream,
         key: req.body.key,
-        data: req.body.data
+        data: message
 	}, (err, response) => {
 		if(err) {
 			res.json(err);

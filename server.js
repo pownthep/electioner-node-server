@@ -13,7 +13,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
-mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
+mongoose.connect('mongodb://admin:2118a6r4@178.128.121.104/electioner');
 const db = mongoose.connection;
 
 // Check connection

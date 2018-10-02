@@ -67,6 +67,17 @@ router.get('/rep/:id', function(req,res){
     });
   });
 
+//Get a representative by area
+router.get('/area/:id', function(req,res){
+    Rep.getRepByArea(req.params.id, function(err,rep) {
+        if(err) {
+            res.json(err);
+            console.log(err);
+        }
+      else res.json(rep);
+    });
+  });
+
 // Get a party by id
 router.get('/party/:id', function(req,res){
     Party.findById(req.params.id, function(err,party) {
