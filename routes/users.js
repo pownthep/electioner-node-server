@@ -71,17 +71,17 @@ passport.deserializeUser(function (id, done) {
 	});
 });
 
-router.post('/login',
+/*router.post('/login',
 	passport.authenticate('local', {  }),
 	function (req, res) {
 		res.json("KUY");
 	});
-/*
-router.post('/login', (req, res) => {
-	console.log(req.body);
-	res.json("OK");
-})
 */
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }),
+function(req, res) {
+	res.json('Successfully logged in!');
+});
+
 //Candidate info route
 /*router.get('/candidates', ensureAuthenticated, (req, res) => {
 	res.render('candidates', {
@@ -107,7 +107,7 @@ function ensureAuthenticated(req, res, next){
 		return next();
 	} else {
 		//req.flash('error_msg','You are not logged in');
-		res.redirect('/users/login');
+		res.json('You are not logged in! Please log in!');
 	}
 }
 

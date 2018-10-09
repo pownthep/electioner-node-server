@@ -12,8 +12,8 @@ const multichain = require("multichain-node")({
 const fs = require('fs');
 const crypto = require('crypto');
 
-const priv_key = '';
-const publicKey = fs.readFileSync( './localhost.cert' );
+const priv_key = fs.readFileSync( './private.key' );
+const publicKey = fs.readFileSync( './localhost.cert');
 
 router.post('/setkeys', (req,res) => {
     pub_key = req.body.key;
@@ -41,13 +41,13 @@ router.get('/multichain', (req,res) => {
 			console.log(err);
 		}
 		else {
-			res.json(response);
+			res.json(info);
 		}
     });
 });
 
 // List stream
-router.get('/liststreams', (req, res) => {
+router.get('/liststreams', ensureAuthenticated, (req, res) => {
 	multichain.listStreams((err, response) => {
 		if(err) {
 			res.json(err);
@@ -76,7 +76,7 @@ router.get('/liststreamitems/:id', (req, res) => {
 
 // List asset transaction
 router.get('/listassettransaction/:id', (req, res) => {
-	const test = crypto.createECDH();
+	//const test = crypto.createECDH();
 	multichain.listAssetTransactions({
 		asset: req.params.id
 	}, (err, response) => {
@@ -115,11 +115,11 @@ router.get('/publish/:id', (req, res) => {
 
 // publishFrom: ["from", "stream", "key", "data"]
 router.post('/publish', (req, res) => {
-	console.log(req.body);
 	let buffer = new Buffer(req.body.data);
-	let encrypted = crypto.publicEncrypt(publicKey, buffer);
-	let message = (encrypted.toString("hex"));
-	console.log(message);
+	//let encrypted = crypto.privateDecrypt(priv_key, message);
+	let message = (buffer.toString("hex"));
+	//console.log(crypto.privateDecrypt(priv_key, buffer));
+	//console.log(message);
 	multichain.publish({
         stream: req.body.stream,
         key: req.body.key,
@@ -183,4 +183,16 @@ router.get('/grant', (req, res) => {
 	})
 });
 
+router.post('/send', (req, res) => {
+
+});
+
+function ensureAuthenticated(req, res, next){
+	if(req.isAuthenticated()){
+		return next();
+	} else {
+		//req.flash('error_msg','You are not logged in');
+		res.json('You are not logged in! Please log in!');
+	}
+}
 module.exports = router;
