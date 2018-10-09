@@ -50,7 +50,7 @@ var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200
 };
-
+app.use(express.static(path.join(__dirname, 'electioner-angular')));
 app.use(cors(corsOptions));
 
 // Bring in Models
