@@ -220,7 +220,7 @@ router.get('/count/:streamname/:key', (req, res) => {
 	multichain.listStreamKeyItems({
 		stream: req.params.streamname,
 		key: req.params.key,
-		count: 10
+		count: 10000000
 	}, (err, ballots) => {
 		if(err) {
 			res.json(err);
