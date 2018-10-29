@@ -45,7 +45,7 @@ let Representative = module.exports = mongoose.model('Representative', represent
 module.exports.getReps = function(callback) {
     Representative.find(callback);
 }
-module.exports.getRepByArea = function(area, callback){
-	var query = {area: area};
+module.exports.getRepByArea = function(area, province,callback){
+	var query = {area: area, province: province};
 	Representative.find(query, callback);
 }

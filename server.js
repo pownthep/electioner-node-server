@@ -12,7 +12,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
-
 mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
 const db = mongoose.connection;
 
@@ -41,6 +40,7 @@ const options = {
   requestCert: false,
   rejectUnauthorized: false
 };
+
 
 const app = express();
 const port = process.env.PORT || 443;

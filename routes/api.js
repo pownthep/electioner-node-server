@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Rep = require('../models/representative');
 const Party = require('../models/party');
+const District = require('../models/district');
 
 //Add a representative
 router.post('/add_rep', (req,res) => {
@@ -68,8 +69,8 @@ router.get('/rep/:id', function(req,res){
   });
 
 //Get a representative by area
-router.get('/area/:id', function(req,res){
-    Rep.getRepByArea(req.params.id, function(err,rep) {
+router.get('/area/:id/:province', function(req,res){
+    Rep.getRepByArea(req.params.id, req.params.province, function(err,rep) {
         if(err) {
             res.json(err);
             console.log(err);
@@ -175,5 +176,23 @@ router.post('/party/edit/:id', function(req,res){
         }
     });
 });
+
+/*router.get('/province', (req,res) => {
+    for (var x of province) {
+        var newDistrict = new District({
+            province: x.province,
+            amphoe: x.amphoe,
+            district: x.district}
+        );
+        newDistrict.save((err, district) => {
+            if(err) {
+                //res.json(err);
+                console.log(err);
+            }
+            else console.log(district);
+        });
+    }
+    res.json(province[0].province);
+});*/
 
 module.exports = router;
