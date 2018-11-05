@@ -5,6 +5,7 @@ const router = express.Router();
 const Rep = require('../models/representative');
 const Party = require('../models/party');
 const District = require('../models/district');
+const qrcode = require('qrcode');
 
 //Add a representative
 router.post('/add_rep', (req,res) => {
@@ -69,8 +70,8 @@ router.get('/rep/:id', function(req,res){
   });
 
 //Get a representative by area
-router.get('/area/:id/:province', function(req,res){
-    Rep.getRepByArea(req.params.id, req.params.province, function(err,rep) {
+router.get('/area/:id', function(req,res){
+    Rep.getRepByArea(req.params.id, "แพร่", function(err,rep) {
         if(err) {
             res.json(err);
             console.log(err);
@@ -194,5 +195,17 @@ router.post('/party/edit/:id', function(req,res){
     }
     res.json(province[0].province);
 });*/
+
+router.post('/qr', (req, res) => {
+    const data = req.body.data;
+    run().catch(error => console.error(error.stack));
+    async function run() {
+        const response = await qrcode.toDataURL(data);
+        //fs.writeFileSync('./qr.html', `<img src="${res}">`);
+        res.json(response);
+    }
+    console.log("It worked");
+
+});
 
 module.exports = router;

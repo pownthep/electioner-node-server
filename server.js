@@ -15,6 +15,7 @@ const fs = require('fs');
 mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
 const db = mongoose.connection;
 
+
 // Check connection
 db.once('open', function(){
   console.log('Connected to MongoDB');
@@ -50,6 +51,7 @@ var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200
 };
+
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(cors(corsOptions));
 
@@ -109,7 +111,7 @@ app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 
-//app.listen(PORT, HOST);
-server.listen( port, function () {
+app.listen(80, HOST);
+/*server.listen( port, function () {
   console.log( 'Express server listening on port ' + server.address().port );
-} );
+} );*/
