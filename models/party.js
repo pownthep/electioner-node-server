@@ -6,8 +6,8 @@ let partySchema = mongoose.Schema({
     type: String,
     required: true
   },
-  code: {
-    type: String,
+  number: {
+    type: Number,
     required: true
   },
   url: {

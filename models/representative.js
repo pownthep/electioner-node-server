@@ -10,23 +10,11 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  age: {
-    type: Number,
-    required: true
-  },
-  number: {
-    type: Number,
+  dob: {
+    type: String,
     required: true
   },
   party: {
-    type: String,
-    required: true
-  },
-  area: {
-    type: String,
-    required: true
-  },
-  province: {
     type: String,
     required: true
   },
@@ -34,7 +22,7 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  image: {
+  url: {
     type: String,
     required: true
   }
@@ -45,7 +33,7 @@ let Representative = module.exports = mongoose.model('Representative', represent
 module.exports.getReps = function(callback) {
     Representative.find(callback);
 }
-module.exports.getRepByArea = function(area, province,callback){
-	var query = {area: area, province: province};
+module.exports.getRepByDistrict = function(district,callback){
+	var query = {district: district};
 	Representative.find(query, callback);
 }

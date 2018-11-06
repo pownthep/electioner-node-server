@@ -13,13 +13,10 @@ router.post('/add_rep', (req,res) => {
         {
             fname : req.body.fname,
             lname : req.body.lname,
-            age : req.body.age,
-            number : req.body.number,
+            dob : req.body.dob,
             party : req.body.party,
-            area : req.body.area,
-            province : req.body.province,
             district : req.body.district,
-            image : req.body.image
+            url : req.body.url
         }
     );
     newRep.save((err, rep) => {
@@ -34,9 +31,9 @@ router.post('/add_rep', (req,res) => {
 //Add a party
 router.post('/add_party', (req,res) => {
     var newParty = new Party({
-        name: req.body.party_name,
-        code: req.body.code,
-        url: req.body.image_url}
+        name: req.body.name,
+        number: req.body.number,
+        url: req.body.url}
     );
     newParty.save((err, party) => {
         if(err) {
@@ -71,7 +68,7 @@ router.get('/rep/:id', function(req,res){
 
 //Get a representative by area
 router.get('/area/:id', function(req,res){
-    Rep.getRepByArea(req.params.id, "แพร่", function(err,rep) {
+    Rep.getRepByDistrict(req.params.id, "แพร่", function(err,rep) {
         if(err) {
             res.json(err);
             console.log(err);
@@ -136,13 +133,10 @@ router.post('/rep/edit/:id', function(req,res){
         {
             fname : req.body.fname,
             lname : req.body.lname,
-            age : req.body.age,
-            number : req.body.number,
+            dob : req.body.dob,
             party : req.body.party,
-            area : req.body.area,
-            province : req.body.province,
             district : req.body.district,
-            image : req.body.image
+            url : req.body.url
         };
     var query = {_id:req.params.id}
 
@@ -161,8 +155,8 @@ router.post('/rep/edit/:id', function(req,res){
 router.post('/party/edit/:id', function(req,res){
     var newParty = {
         name: req.body.party_name,
-        code: req.body.code,
-        url: req.body.image_url
+        number: req.body.number,
+        url: req.body.url
     };
     var query = {_id:req.params.id}
     
@@ -201,11 +195,8 @@ router.post('/qr', (req, res) => {
     run().catch(error => console.error(error.stack));
     async function run() {
         const response = await qrcode.toDataURL(data);
-        //fs.writeFileSync('./qr.html', `<img src="${res}">`);
         res.json(response);
     }
-    console.log("It worked");
-
 });
 
 module.exports = router;
