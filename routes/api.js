@@ -154,13 +154,12 @@ router.post('/rep/edit/:id', function(req,res){
 //Update a party
 router.post('/party/edit/:id', function(req,res){
     var newParty = {
-        name: req.body.party_name,
+        name: req.body.name,
         number: req.body.number,
         url: req.body.url
     };
     var query = {_id:req.params.id}
     
-    console.log(req.body);
     Party.updateOne(query, newParty, function(err, party){
         if(err){
             console.log(err);
