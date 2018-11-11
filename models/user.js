@@ -1,41 +1,29 @@
 let mongoose = require('mongoose');
-let bcrypt = require('bcryptjs');
 
 // User Schema
 let userSchema = mongoose.Schema({
-  username: {
+  pubKey: {
     type: String,
     required: true
   },
-  password: {
+  district: {
     type: String,
     required: true
   },
+  voted: {
+    type: Number,
+    require: true
+  }
 });
 
 let User = module.exports = mongoose.model('User', userSchema);
 
 module.exports.createUser = function(newUser, callback){
-  bcrypt.genSalt(10, function(err, salt) {
-    bcrypt.hash(newUser.password, salt, function(err, hash) {
-        newUser.password = hash;
-        newUser.save(callback);
-    });
-  });
+  newUser.save(callback);
 }
 
-module.exports.getUserByUsername = function(username, callback){
-	var query = {username: username};
+module.exports.getUserByKey = function(pubKey, callback){
+	var query = {pubKey: pubKey};
 	User.findOne(query, callback);
 }
 
-module.exports.getUserById = function(id, callback){
-	User.findById(id, callback);
-}
-
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-    	if(err) throw err;
-    	callback(null, isMatch);
-	});
-}

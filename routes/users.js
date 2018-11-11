@@ -2,114 +2,162 @@
 
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+const forge = require('node-forge');
+const Rep = require('../models/representative');
+const multichain = require("multichain-node")({
+	port: 6758,
+	host: '178.128.27.70',
+	user: "multichainrpc",
+	pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
+});
+let start = false;
+//Add a representative
 
-// Register get route
-router.get('/register', (req, res) => {
-	res.render('register');
+router.post('/toggle', (req, res) => {
+    start = !start;
+    res.json(start);
 });
 
-// Login get route
-router.get('/login', (req, res) => {
-	res.render('login');
+router.post('/status', (req, res) => {
+    res.json(start);
 });
 
-// Register post route
-router.post('/register', (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
-  
-    //Validation
-    req.checkBody('username', 'Username is required').notEmpty();
-    req.checkBody('password', 'Password is required').notEmpty();
-  
-    let errors = req.validationErrors();
-  
-    if(errors) {
-      res.json(errors);
-    }
-    else {
-      let newUser = new User({
-        username: username,
-        password: password
-      })
-      User.createUser(newUser, (err, user) => {
-        if(err) throw err;
-      })
-      res.json('OK!');
-    }
-  });
+const md = forge.md.sha1.create();
+md.update('sign this', 'utf8');
 
-// Local authentication strategy
-passport.use(new LocalStrategy(
-	function (username, password, done) {
-		User.getUserByUsername(username, (err, user) => {
-			if (err) throw err;
-			if (!user) {
-				return done(null, false, { message: 'Unknown User' });
+//Register user
+router.post('/register', (req,res) => {
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	try{
+		User.getUserByKey(key, (err, user) => {
+			if (err) {
+				res.sendStatus(500);
+				console.log(err);
 			}
-			User.comparePassword(password, user.password, function (err, isMatch) {
-				if (err) throw err;
-				if (isMatch) {
-					return done(null, user);
-				} else {
-					return done(null, false, { message: 'Invalid password' });
-				}
-			});
+			if (!user) {
+				let newUser = new User({
+					pubKey: key,
+					district: req.body.district,
+					voted: 0
+	
+				})
+				User.createUser(newUser, (err, user) => {
+					if(err) {
+						console.log(err);
+						res.json(err);
+					}
+					else {
+						res.json(user);
+					}
+				})
+			}
+			else {
+				res.send("User already exist");
+			}
 		});
-	}));
-
-passport.serializeUser(function (user, done) {
-	done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-	User.getUserById(id, function (err, user) {
-		done(err, user);
-	});
-});
-
-/*router.post('/login',
-	passport.authenticate('local', {  }),
-	function (req, res) {
-		res.json("KUY");
-	});
-*/
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }),
-function(req, res) {
-	res.json('Successfully logged in!');
-});
-
-//Candidate info route
-/*router.get('/candidates', ensureAuthenticated, (req, res) => {
-	res.render('candidates', {
-		login: true
-	});
-});*/
-
-router.get('/logout', ensureAuthenticated, (req, res) => {
-	req.logout();
-  res.redirect('/');
-});
-
-/*router.get('/login/:id/:password', (req, res) => {
-	res.render('login', {
-		notFilled:true,
-		id: req.params.id,
-		password: req.params.password
-	})
-});*/
-
-function ensureAuthenticated(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	} else {
-		//req.flash('error_msg','You are not logged in');
-		res.json('You are not logged in! Please log in!');
 	}
-}
+	catch(e) {
+		res.sendStatus(500);
+	}
 
+	
+});
+
+//Login user
+router.post('/login', (req,res) => {
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	try {
+		User.getUserByKey(key, (err, user) => {
+			if (err) {
+				res.sendStatus(500);
+			}
+			if(user) {
+				if(user.voted == 0) {
+					Rep.getReps((err, reps) => {
+						if(err) {
+							console.log(err);
+							res.sendStatus(500)
+						}
+						if(reps) {
+							res.json(reps);
+						}
+						else {
+							res.send([]);
+						}
+					})
+				}
+				else {
+					res.json([]);
+				}
+				
+			}
+			else {
+				res.json("User does not exist");
+				console.log("User does not exist");
+			}
+		});
+	}
+	catch(e) {
+		res.sendStatus(500);
+	}
+	
+});
+
+router.post('/vote', (req,res) => {
+	console.log(req.body);
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	if(true) {
+		User.getUserByKey(key, (err, user) => {
+			if(err) res.sendStatus(500);
+			if(user && user.voted == 0) {
+				var signature = req.body.signature;
+				try {
+					var publicKey = forge.pki.publicKeyFromPem(key);
+					var legit = publicKey.verify(md.digest().bytes(), signature);
+					if (legit) {
+						let message = forge.util.bytesToHex(req.body.data);
+						multichain.publish({
+							stream: "test4",
+							key: key,
+							data: message
+						}, (err, response) => {
+							if(err) {
+								res.json(err);
+								console.log(err);
+							}
+							else {
+								var query = {pubKey:key}
+								user.voted = 1;
+								User.updateOne(query, user, function(err, user){
+									if(err){
+										console.log(err);
+										res.json(err);
+									}
+									else {
+										res.json(response);
+									}
+								});							
+							}
+						})
+					}
+					else {
+						res.json("Aunthentication failed.");
+					}
+				}
+				catch (e) {
+					res.json("Aunthentication failed.");
+				}
+			}
+			else {
+				res.json("Already voted!");
+			}
+		});
+	}
+	else {
+		res.json(100);
+	}
+	
+});
 
 module.exports = router;

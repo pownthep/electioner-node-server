@@ -217,9 +217,9 @@ router.get('/count/:streamname/:key', (req, res) => {
 	var candidate = {};
 	var party = {};
 	var count = {};
-	multichain.listStreamKeyItems({
+	multichain.listStreamItems({
 		stream: req.params.streamname,
-		key: req.params.key,
+		//key: req.params.key,
 		count: 10000000
 	}, (err, ballots) => {
 		if(err) {

@@ -6,8 +6,19 @@ const Rep = require('../models/representative');
 const Party = require('../models/party');
 const District = require('../models/district');
 const qrcode = require('qrcode');
-
+let start = false;
 //Add a representative
+
+router.post('/toggle', (req, res) => {
+    start = !start;
+    res.json(start);
+});
+
+router.post('/status', (req, res) => {
+    res.json(start);
+});
+
+
 router.post('/add_rep', (req,res) => {
     var newRep = new Rep(
         {
