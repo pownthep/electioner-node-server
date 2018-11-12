@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require('../models/user');
 const forge = require('node-forge');
 const Rep = require('../models/representative');
+const paillier = require('jspaillier');
 const multichain = require("multichain-node")({
 	port: 6758,
 	host: '178.128.27.70',
@@ -13,6 +14,20 @@ const multichain = require("multichain-node")({
 });
 let start = false;
 //Add a representative
+let keys = paillier.generateKeys(2048);
+var BigInteger = require('jsbn').BigInteger;
+var encA = keys.pub.encrypt( new BigInteger('1'));
+var encB = keys.pub.encrypt( new BigInteger('1'));
+
+router.get('/test', (req, res) => {
+	let encAB = encA;
+	for(var i = 0; i <= 1000000; i++) {
+		encAB = keys.pub.add(encAB, encB);
+		console.log(i);
+		if(i==1000000) res.json(keys.sec.decrypt(encAB).toString(10));
+	}
+	//res.json(keys.sec.decrypt(keys.pub.add(encA, encB)).toString(10));
+})
 
 router.post('/toggle', (req, res) => {
     start = !start;
