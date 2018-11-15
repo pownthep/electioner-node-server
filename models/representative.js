@@ -26,6 +26,7 @@ let representativeSchema = mongoose.Schema({
     type: String,
     required: true
   }
+
 });
 
 let Representative = module.exports = mongoose.model('Representative', representativeSchema);

@@ -19,10 +19,10 @@ let start = true;
 let n = '63643836349122878110314948763039607655658373514564579581533705313808805192463';
 let lambda = "31821918174561439055157474381519803827571165229892378477650320364876810303840";
 let bits = 256;
-let pub = new paillier.generatePub(bits, new BigInteger(n));
+let pub = new paillier.publicKey(bits, new BigInteger(n));
 let priv = new paillier.privateKey(new BigInteger(lambda), pub);
-let stream = "test6";
-let encA = pub.encrypt(new BigInteger('1'));
+let stream = "test7";
+
 //Routes
 router.get('/key', (req, res) => {
 	res.json({
@@ -32,31 +32,62 @@ router.get('/key', (req, res) => {
 })
 
 router.get('/decrypt', (req, res) => {
-	// multichain.listStreamItems({
-	// 	stream: stream,
-	// 	//key: req.params.key,
-	// 	count: 1
-	// }, (err, ballots) => {
-	// 	if (err) res.json("There is error");
-	// 	if(ballots) {
-	// 		for(let ballot of ballots) {
-	// 			let obj = forge.util.hexToBytes(ballot.data);
-	// 			//console.log(obj.5be7f98ed75164378cacbf87);
-	// 			/*for(let key in obj) {
-	// 				//let decrypt = priv.decrypt(new BigInteger(obj.key)).toString(10);
-	// 				console.log(obj.key +"\n");
-	// 			}*/
-	// 		}
-	// 	}
-	// });
-	//res.json(priv.decrypt(new BigInteger(req.params.data)).toString(10));
-	//console.log(priv.decrypt(new BigInteger(req.params.data)).toString(10));
+	var result = [];
+	var candidate = {};
+	var party = {};
+	let sum = {};
+	multichain.listStreamItems({
+		stream: stream,
+		//key: req.params.key,
+		count: 100000
+	}, (err, ballots) => {
+		if (err) res.json("There is error");
+		if(ballots) {
+			for(let i = 0; i < ballots.length; i++) {
+				let obj = forge.util.hexToBytes(ballots[i].data);
+				obj = JSON.parse(obj);
+				for(let key in obj) {
+					if(sum[key]) {
+						sum[key] = pub.add(new BigInteger(obj[key]), sum[key]);
+					}
+					else{
+						sum[key] = new BigInteger(obj[key]);
+					}
+				}
+				if (i==ballots.length-1) {
+					for(let key in sum) {
+						sum[key] = priv.decrypt(sum[key]).toString(10);
+					}
+					var j = 0;
+					var length = Object.keys(sum).length;
+					for (var key in sum) {
+						Rep.findById(key, function(err,rep) {
+							if(err) {
+								res.json("Error");
+								console.log(err);
+							}
+							else {
+								candidate[rep.fname+' '+rep.lname] = sum[rep._id];
+								if (party[rep.party]) {
+									party[rep.party] = parseInt(party[rep.party]) + parseInt(sum[rep._id]);
+								}
+								else {
+									party[rep.party] = parseInt(sum[rep._id]);
+								}
+								j++;
+								if(j === length) {
+									result.push(candidate);
+									result.push(party);
+									res.json(result);	
+								}
+							}
+						});
+					}
 
-	for(let i = 0; i <= 1000000; i++) {
-		if(i==1000000) res.json("done");
-		priv.decrypt(encA);
-		console.log(i);
-	}
+				}
+			}
+		}
+	});
 });
 
 router.post('/toggle', (req, res) => {
