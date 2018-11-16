@@ -13,7 +13,6 @@ const cors = require('cors');
 mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
 const db = mongoose.connection;
 
-
 // Check connection
 db.once('open', function(){
   console.log('Connected to MongoDB');
@@ -25,16 +24,14 @@ db.on('error', function(err){
 });
 
 // Constants
-const HOST = '127.0.0.1';
+const HOST = '0.0.0.0';
 const PORT = 80;
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
 const api = require('./routes/api');
 const multichain = require('./routes/multichain');
-
 const app = express();
-
 
 var corsOptions = {
   origin: '*',
@@ -100,6 +97,4 @@ app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 
-app.listen(PORT, HOST, () => {
-  console.log("Express REST API server started");
-});
+app.listen(PORT, HOST);

@@ -84,7 +84,7 @@ router.get('/area/:id', function(req,res){
             res.json(err);
             console.log(err);
         }
-      else res.json(rep);
+        else res.json(rep);
     });
   });
 
