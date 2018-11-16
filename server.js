@@ -10,8 +10,6 @@ const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
 mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
 const db = mongoose.connection;
 
@@ -27,25 +25,16 @@ db.on('error', function(err){
 });
 
 // Constants
-const HOST = '0.0.0.0';
+const HOST = '127.0.0.1';
+const PORT = 80;
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
 const api = require('./routes/api');
 const multichain = require('./routes/multichain');
 
-// App
-const options = {
-  key: fs.readFileSync( './localhost.key' ),
-  cert: fs.readFileSync( './localhost.cert' ),
-  requestCert: false,
-  rejectUnauthorized: false
-};
-
-
 const app = express();
-const port = process.env.PORT || 443;
-const server = https.createServer( options, app );
+
 
 var corsOptions = {
   origin: '*',
@@ -111,7 +100,6 @@ app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 
-app.listen(80, HOST);
-/*server.listen( port, function () {
-  console.log( 'Express server listening on port ' + server.address().port );
-} );*/
+app.listen(PORT, HOST, () => {
+  console.log("Express REST API server started");
+});

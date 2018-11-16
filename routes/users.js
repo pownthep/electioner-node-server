@@ -8,11 +8,12 @@ const Rep = require('../models/representative');
 const paillier = require('jspaillier');
 const BigInteger = require('jsbn').BigInteger;
 const multichain = require("multichain-node")({
-	port: 6758,
-	host: '178.128.27.70',
+	port: 2904,
+	host: '127.0.0.1',
 	user: "multichainrpc",
-	pass: "HpE3acAYinEcBoV1sBkMS9FnqeTY86rm5pQz6Mky7MRZ"
+	pass: "2118a6r4"
 });
+
 
 //Variables
 let start = true;
