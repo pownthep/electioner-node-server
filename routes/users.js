@@ -151,7 +151,7 @@ router.post('/login', (req,res) => {
 			}
 			if(user) {
 				if(user.voted == 0) {
-					Rep.getReps((err, reps) => {
+					Rep.getRepByDistrict(user.district, (err, reps) => {
 						if(err) {
 							console.log(err);
 							res.sendStatus(500)
