@@ -24,7 +24,7 @@ db.on('error', function(err){
 });
 
 // Constants
-const PORT = 80;
+const PORT = 8080;
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
