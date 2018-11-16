@@ -12,5 +12,5 @@ COPY . .
 # If you are building your code for production
 RUN npm install --only=production
 
-EXPOSE 80
+EXPOSE 8080
 CMD [ "npm", "start" ]

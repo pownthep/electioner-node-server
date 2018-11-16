@@ -24,7 +24,6 @@ db.on('error', function(err){
 });
 
 // Constants
-const HOST = '0.0.0.0';
 const PORT = 80;
 
 const routes = require('./routes/index');
@@ -97,4 +96,4 @@ app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 
-app.listen(PORT, HOST);
+app.listen(PORT);
