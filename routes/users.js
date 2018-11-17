@@ -42,7 +42,10 @@ router.get('/decrypt', (req, res) => {
 		//key: req.params.key,
 		count: 100000
 	}, (err, ballots) => {
-		if (err) res.json("There is error");
+		if (err) {
+			res.json("There is error");
+			console.log(err);
+		}
 		if(ballots) {
 			for(let i = 0; i < ballots.length; i++) {
 				let obj = forge.util.hexToBytes(ballots[i].data);
@@ -67,7 +70,7 @@ router.get('/decrypt', (req, res) => {
 								res.json("Error");
 								console.log(err);
 							}
-							else {
+							else if(rep){
 								candidate[rep.fname+' '+rep.lname] = sum[rep._id];
 								if (party[rep.party]) {
 									party[rep.party] = parseInt(party[rep.party]) + parseInt(sum[rep._id]);
