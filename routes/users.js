@@ -85,6 +85,14 @@ router.get('/decrypt', (req, res) => {
 									res.json(result);	
 								}
 							}
+							else {
+								j++;
+								if(j === length) {
+									result.push(candidate);
+									result.push(party);
+									res.json(result);	
+								}
+							}
 						});
 					}
 
