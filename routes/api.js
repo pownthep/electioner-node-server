@@ -110,6 +110,23 @@ router.get('/party', (req,res) => {
     })
 });
 
+//Query reps by party name
+router.post('/listreps', (req,res) => {
+    if(req.body.party) {
+        Rep.getRepByParty(req.body.party,function(err, reps){
+            if(err) {
+                res.json(err);
+                console.log(err);
+            }
+            else res.json(reps);
+        })
+    }
+    else {
+        res.json("Error");
+    }
+    
+});
+
 //Delete a representative
 router.delete('/rep/:id', function(req,res){
     let query = {_id:req.params.id}
@@ -181,24 +198,6 @@ router.post('/party/edit/:id', function(req,res){
         }
     });
 });
-
-/*router.get('/province', (req,res) => {
-    for (var x of province) {
-        var newDistrict = new District({
-            province: x.province,
-            amphoe: x.amphoe,
-            district: x.district}
-        );
-        newDistrict.save((err, district) => {
-            if(err) {
-                //res.json(err);
-                console.log(err);
-            }
-            else console.log(district);
-        });
-    }
-    res.json(province[0].province);
-});*/
 
 router.post('/qr', (req, res) => {
     const data = req.body.data;

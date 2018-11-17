@@ -22,7 +22,7 @@ let lambda = "318219181745614390551574743815198038275711652298923784776503203648
 let bits = 256;
 let pub = new paillier.publicKey(bits, new BigInteger(n));
 let priv = new paillier.privateKey(new BigInteger(lambda), pub);
-let stream = "test7";
+let stream = "root";
 
 //Routes
 router.get('/key', (req, res) => {
@@ -105,7 +105,9 @@ md.update('sign this', 'utf8');
 
 //Register user
 router.post('/register', (req,res) => {
-	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
+	console.log(req.body);
+	console.log(key);
 	try{
 		User.getUserByKey(key, (err, user) => {
 			if (err) {
@@ -143,7 +145,9 @@ router.post('/register', (req,res) => {
 
 //Login user
 router.post('/login', (req,res) => {
-	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
+	console.log(req.body);
+	console.log(key);
 	try {
 		User.getUserByKey(key, (err, user) => {
 			if (err) {
@@ -170,6 +174,7 @@ router.post('/login', (req,res) => {
 				
 			}
 			else {
+				console.log(user);
 				res.json("User does not exist");
 				console.log("User does not exist");
 			}
@@ -183,7 +188,7 @@ router.post('/login', (req,res) => {
 
 router.post('/vote', (req,res) => {
 	console.log(req.body);
-	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24);
+	let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
 	if(start) {
 		User.getUserByKey(key, (err, user) => {
 			if(err) res.sendStatus(500);
@@ -193,7 +198,6 @@ router.post('/vote', (req,res) => {
 					var publicKey = forge.pki.publicKeyFromPem(key);
 					var legit = publicKey.verify(md.digest().bytes(), signature);
 					if (legit) {
-						//let message = forge.util.bytesToHex(JSON.stringify(req.body.data));
 						multichain.publish({
 							stream: stream,
 							key: key,

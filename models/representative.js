@@ -38,3 +38,8 @@ module.exports.getRepByDistrict = function(district,callback){
 	var query = {district: district};
 	Representative.find(query, callback);
 }
+
+module.exports.getRepByParty = function(party,callback){
+	var query = {party: party};
+	Representative.find(query, callback);
+}
