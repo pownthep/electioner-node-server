@@ -120,6 +120,7 @@ router.get('/result/latest', (req,res) => {
 					}
 					if(i==responses.length-1) {
 						if(final.length == 2) {
+							console.log(final[0]);
 							let tmp = {};
 							let j = 0;
 							let length = Object.keys(final[0]).length;
@@ -197,6 +198,7 @@ router.get('/decrypt/:name', (req, res) => {
 							}
 							var j = 0;
 							var length = Object.keys(sum).length;
+							let tmp = {};
 							for (var key in sum) {
 								Rep.findById(key, function(err,rep) {
 									if(err) {
@@ -204,17 +206,18 @@ router.get('/decrypt/:name', (req, res) => {
 										console.log(err);
 									}
 									else if(rep) {
-										let tmp = {
-											name: rep.fname+" "+rep.lname,
-											party: rep.party,
-											votes: parseInt(sum[rep._id])
-										}
-										if(!candidate[rep.district]) {
-											candidate[rep.district] = [tmp];
-										}
-										else {
-											candidate[rep.district].push(tmp);
-										}
+										// let tmp = {
+										// 	rep.fname+" "+rep.lname: 
+										// 	party: rep.party,
+										// 	votes: parseInt(sum[rep._id])
+										// }
+										candidate[rep.district][rep.fname+" "+rep.lname] = parseInt(sum[rep._id]);
+										// if(!candidate[rep.district]) {
+										// 	candidate[rep.district] = [tmp];
+										// }
+										// else {
+										// 	candidate[rep.district].push(tmp);
+										// }
 										
 										if (party[rep.party]) {
 											party[rep.party] = parseInt(party[rep.party]) + parseInt(sum[rep._id]);
