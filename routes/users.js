@@ -212,7 +212,7 @@ router.get('/decrypt/:name', (req, res) => {
 											candidate[rep.district] = tmp;
 										}
 										else {
-											candidate[rep.district][rep.fname+" "+rep.lname];
+											candidate[rep.district][rep.fname+" "+rep.lname] = parseInt(sum[rep._id]);
 										}
 										
 										if (party[rep.party]) {
