@@ -118,26 +118,28 @@ router.get('/result/latest', (req,res) => {
 							}
 						}
 					}
-					if(i==responses.length-1 && final.length == 2) {
-						let tmp = {};
-						let j = 0;
-						let length = Object.keys(final[0]).length;
-						for(let key in final[0]) {
-							let district = {
-								district: key.split(' ')[1]+' '+key.split(' ')[2],
-								candidates: final[0][key]
-							}
-							if(!tmp[key.split(' ')[0]]) tmp[key.split(' ')[0]] = [district];
-							else tmp[key.split(' ')[0]].push(district);
-							j++;
-							if(j==length) {
-								final[0] = tmp;
-								res.json(final);
+					if(i==responses.length-1) {
+						if(final.length == 2) {
+							let tmp = {};
+							let j = 0;
+							let length = Object.keys(final[0]).length;
+							for(let key in final[0]) {
+								let district = {
+									district: key.split(' ')[1]+' '+key.split(' ')[2],
+									candidates: final[0][key]
+								}
+								if(!tmp[key.split(' ')[0]]) tmp[key.split(' ')[0]] = [district];
+								else tmp[key.split(' ')[0]].push(district);
+								j++;
+								if(j==length) {
+									final[0] = tmp;
+									res.json(final);
+								}
 							}
 						}
-					}
-					else {
-						res.json(final);
+						else {
+							res.json(final);
+						}
 					}
 				}
 			})).catch(error => {
