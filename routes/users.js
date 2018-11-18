@@ -91,26 +91,19 @@ router.get('/result/latest', (req,res) => {
 				responses.push(response1.data,response2.data,response3.data,response4.data,response5.data,response6.data);
 				for(let i = 0; i < responses.length; i++) {
 					if(responses[i].length == 2) {
-						// console.log(responses[i]);
-						// console.log('-----------------------------------------------');
 						if(final.length == 0) {
 							final = responses[i];
-							//console.log(final[0]);
 						}
 						else {
-							// console.log(final);
-							// console.log('-----------------------------------------------');
-							for(let key in responses[i][0]) {
-								//console.log(key);
-								//console.log(responses[i][0][key]);
-								for(let j = 0; j < responses[i][0][key].length; j++) {
-									//console.log(responses[i][0][key][j].votes);
-									if(final[0][key]) final[0][key][j].votes+=responses[i][0][key][j].votes
-									else final[0][key] = responses[i][0][key]
-									// console.log(final[0][key][j]);
-									// console.log(final[0][key][j].votes);
-									// console.log('-----------------------------------------------');
+							for(let district in responses[i][0]) {
+								if(!final[0][district]) {
+									final[0][district] = responses[i][0][district]
 								}
+								else {
+									for(let candidate in district) {
+										final[0][district][candidate] += responses[i][0][district][candidate];
+									}
+								}						
 							}
 							for(let key in responses[i][1]) {
 								//console.log();
@@ -120,7 +113,7 @@ router.get('/result/latest', (req,res) => {
 					}
 					if(i==responses.length-1) {
 						if(final.length == 2) {
-							console.log(final[0]);
+							//console.log(final[0]);
 							let tmp = {};
 							let j = 0;
 							let length = Object.keys(final[0]).length;
