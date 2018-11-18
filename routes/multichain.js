@@ -4,174 +4,153 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const forge = require('node-forge');
-const multichain = require("multichain-node")({
+const os = require( 'os' );
+const networkInterfaces = os.networkInterfaces( );
+const config = {
 	port: 2904,
 	host: '127.0.0.1',
 	user: "multichainrpc",
 	pass: "2118a6r4"
-});
+}
+const multichain = require("multichain-node")(config);
 const Rep = require('../models/representative');
+const http = require('http');
 
-// Get address api
-router.get('/getaddresses', (req, res) => {
-    multichain.getAddresses((err, response) => {
-        if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-    });
+//listStreamPublisherItems: ["stream", "address", {"verbose": false}, {"count": 10}, {"start": startDefault}, {"local-ordering": false}],
+router.get('/liststream/publish/items', (req,res) => {
+	try {
+		multichain.getAddresses({
+
+		},(err, addresses) => {
+			if(err) res.sendStatus(500);
+			else {
+				console.log(addresses[0]);
+				multichain.listStreamPublisherItems({
+					stream: "election4",
+					address: addresses[0],
+					count: 20000000
+				}, (err, items) => {
+					if(err) res.sendStatus(500);
+					else res.json(items)
+				});				
+			}
+		})
+		
+	}
+	catch(e) {
+		console.log(e);
+	}
+});
+
+//getAddresses: [{"verbose": false}]
+router.get('/getaddress', (req,res) => {
+	try {
+		multichain.getAddresses({
+
+		},(err, response) => {
+			if(err) res.sendStatus(500);
+			else res.json(response[0]);
+		})
+	}
+	catch(e) {
+		console.log(e);
+	}
+});
+
+//listWalletTransactions: [{"count": 10}, {"skip": 0}, {"includeWatchOnly": false}, {"verbose": false}]
+router.get('/listwallettransactions', (req, res) => {
+    multichain.listWalletTransactions({
+        count: 10000000000000000
+    }, (err, response) => {
+        if(err) res.sendStatus(500);
+        else if (response) {
+            res.json(response);
+        }
+        else {
+            res.sendStatus(500);
+        }
+    })
 });
 
 // Test multichain connection
 router.get('/multichain', (req,res) => {
-    multichain.getInfo((err, info) => {
-        if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(info);
-		}
-    });
+	try {
+		multichain.getInfo((err, info) => {
+			if(err) {
+				res.json(err);
+				console.log(err);
+			}
+			else {
+				res.json(info);
+			}
+		});
+	}
+	catch(e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 // List stream
 router.get('/liststreams', (req, res) => {
-	multichain.listStreams((err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-    })
+	try {
+		multichain.listStreams((err, response) => {
+			if(err) {
+				res.json(err);
+				console.log(err);
+			}
+			else {
+				res.json(response);
+			}
+		});
+	}
+	catch(e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 // List stream items
 router.get('/liststreamitems/:id', (req, res) => {
-	multichain.listStreamItems({
-		stream: req.params.id,
-		count: 10000000000
-	}, (err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
+	try {
+		multichain.listStreamItems({
+			stream: req.params.id,
+			count: 10000000000
+		}, (err, response) => {
+			if(err) {
+				res.json(err);
+				console.log(err);
+			}
+			else {
+				res.json(response);
+			}
+		});
+	}
+	catch(e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 // List asset transaction
 router.get('/listassettransaction/:id', (req, res) => {
-	multichain.listAssetTransactions({
-		asset: req.params.id
-	}, (err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
-});
-
-router.get('/publish/:id', (req, res) => {
-	let buffer = new Buffer("Kuy");
-	let encrypted = crypto.publicEncrypt(publicKey, buffer);
-	let message = (encrypted.toString("hex"));
-	console.log(message);
-	console.log(encrypted);
-	console.log(req.params.id);
-	multichain.publishFrom({
-        from: req.params.id+"",
-        stream: "test",
-		key: "key",
-		data: message
-	}, (err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
-});
-
-// publishFrom: ["from", "stream", "key", "data"]
-router.post('/publish', (req, res) => {
-	//console.log(req.body.data.toString());
-	//let buffer = new Buffer(req.body.data);
-	//console.log(tmp);
-	let message = forge.util.bytesToHex(req.body.data);
-	multichain.publish({
-        stream: req.body.stream,
-        key: req.body.key,
-        data: message
-	}, (err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
-});
-
-// publishFrom: ["from", "stream", "key", "data"]
-router.get('/publish/:id', (req, res) => {
-	multichain.publishFrom({
-        from: req.params.id,
-        stream: "test",
-        key: "key",
-        data: "data"
-	}, (err, response) => {
-		if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
-});
-
-// createKeyPairs: [{"count": 1}]
-router.get('/createkey', (req, res) => {
-	multichain.createKeyPairs({
-        count: 1
-	}, (err, response) => {
-        if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
-});
-
-// grant: ["addresses", "permissions", {"native-amount":null}, {"start-block": null}, {"end-block": null}, {"comment": null}, {"comment-to": null}],
-router.get('/grant', (req, res) => {
-	multichain.grant({
-        addresses: 1
-	}, (err, response) => {
-        if(err) {
-			res.json(err);
-			console.log(err);
-		}
-		else {
-			res.json(response);
-		}
-	})
+	try {
+		multichain.listAssetTransactions({
+			asset: req.params.id
+		}, (err, response) => {
+			if(err) {
+				res.json(err);
+				console.log(err);
+			}
+			else {
+				res.json(response);
+			}
+		});
+	}
+	catch(e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 module.exports = router;

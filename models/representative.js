@@ -25,6 +25,9 @@ let representativeSchema = mongoose.Schema({
   url: {
     type: String,
     required: true
+  },
+  votes: {
+    type: Number,
   }
 
 });
