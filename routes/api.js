@@ -16,6 +16,10 @@ const config = {
 }
 const multichain = require("multichain-node")(config);
 
+router.get('/app', (req,res) => {
+    res.sendFile('/electioner.apk');
+})
+
 router.get('/list/elections', (req,res) => {
     Election.find((err, elections) => {
         if(err) res.sendStatus(500);
