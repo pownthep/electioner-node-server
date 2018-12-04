@@ -5,11 +5,11 @@ const router = express.Router();
 
 
 router.get('/', (req,res) => {
-    res.send('/electioner/index.html');
+    res.send('index.html');
 })
 
 router.get('/admin', (req,res) => {
-    res.send('/admin/index.html');
+    res.sendFile('index.html');
 })
 
 router.get('/index', (req,res) => {

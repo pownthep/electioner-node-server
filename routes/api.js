@@ -16,6 +16,10 @@ const config = {
 }
 const multichain = require("multichain-node")(config);
 
+router.get('/admin', (req,res) => {
+    res.sendFile('/index.html');
+})
+
 router.get('/app', (req,res) => {
     res.sendFile('/electioner.apk');
 })
