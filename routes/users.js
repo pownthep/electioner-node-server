@@ -82,13 +82,13 @@ router.get('/result/latest', (req,res) => {
 			let responses = [];
 			axios.all([
 				axios.get('http://35.229.127.39:8080/users/decrypt/'+data.name),
-				axios.get('http://35.226.78.98:8080/users/decrypt/'+data.name),
-				axios.get('http://35.226.162.109:8080/users/decrypt/'+data.name),
-				axios.get('http://35.188.154.143:8080/users/decrypt/'+data.name),
-				axios.get('http://35.232.59.156:8080/users/decrypt/'+data.name),
-				axios.get('http://35.192.90.156:8080/users/decrypt/'+data.name)
-			  ]).then(axios.spread((response1,response2,response3,response4,response5,response6) => {
-				responses.push(response1.data,response2.data,response3.data,response4.data,response5.data,response6.data);
+				// axios.get('http://35.226.78.98:8080/users/decrypt/'+data.name),
+				// axios.get('http://35.226.162.109:8080/users/decrypt/'+data.name),
+				// axios.get('http://35.188.154.143:8080/users/decrypt/'+data.name),
+				// axios.get('http://35.232.59.156:8080/users/decrypt/'+data.name),
+				// axios.get('http://35.192.90.156:8080/users/decrypt/'+data.name)
+			  ]).then(axios.spread((response1/*,response2,response3,response4,response5,response6*/) => {
+				responses.push(response1.data/*,response2.data,response3.data,response4.data,response5.data,response6.data*/);
 				for(let i = 0; i < responses.length; i++) {
 					if(responses[i].length == 2) {
 						if(final.length == 0) {
