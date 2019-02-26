@@ -8,15 +8,8 @@ const Rep = require('../models/representative');
 const paillier = require('jspaillier');
 const Election = require('../models/election');
 const BigInteger = require('jsbn').BigInteger;
-const os = require( 'os' );
-const networkInterfaces = os.networkInterfaces();
-const config = {
-	port: 2904,
-	host: '127.0.0.1',
-	user: "multichainrpc",
-	pass: "2118a6r4"
-}
-const multichain = require("multichain-node")(config);
+
+const multichain = require("multichain-node")(global.config);
 const axios = require('axios');
 
 //Variables
@@ -292,51 +285,55 @@ router.post('/register', (req,res) => {
 //Login user
 router.post('/login', (req,res) => {
 	Election.findOne().sort({$natural:-1}).exec((err, data)=>{
+		console.log(data);
 		if(err) res.sendStatus(500);
-		if(data.active & !data.ended) {
-			try {
-				let publicKey = forge.pki.publicKeyFromPem(req.body.key);
-				let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
-				User.getUserByKey(key, (err, user) => {
-					if (err) {
-						res.sendStatus(500);
-					}
-					if(user) {
-						if(user.voted == 0) {
-							Rep.getRepByDistrict(user.district, (err, reps) => {
-								if(err) {
-									console.log(err);
-									res.sendStatus(500)
-								}
-								if(reps.length > 0) {
-									console.log(7);
-									res.json(reps);
-								}
-								else {
-									console.log(1);
-									res.json("No representatives in your district.");
-								}
-							})
+		if(data == null) res.json("Election has ended or has not started.")
+		else {
+			if(data.active & !data.ended) {
+				try {
+					let publicKey = forge.pki.publicKeyFromPem(req.body.key);
+					let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
+					User.getUserByKey(key, (err, user) => {
+						if (err) {
+							res.sendStatus(500);
+						}
+						if(user) {
+							if(user.voted == 0) {
+								Rep.getRepByDistrict(user.district, (err, reps) => {
+									if(err) {
+										console.log(err);
+										res.sendStatus(500)
+									}
+									if(reps.length > 0) {
+										console.log(7);
+										res.json(reps);
+									}
+									else {
+										console.log(1);
+										res.json("No representatives in your district.");
+									}
+								})
+							}
+							else {
+								console.log(2);
+								res.json("You're already voted.");
+							}
 						}
 						else {
-							console.log(2);
-							res.json("You're already voted.");
+							console.log(user);
+							res.json("User does not exist");
+							console.log("User does not exist");
 						}
-					}
-					else {
-						console.log(user);
-						res.json("User does not exist");
-						console.log("User does not exist");
-					}
-				});
+					});
+				}
+				catch(e) {
+					console.log(3);
+					res.sendStatus(500);
+				}
 			}
-			catch(e) {
-				console.log(3);
-				res.sendStatus(500);
+			else {
+				res.json("Election has ended or has not started.")
 			}
-		}
-		else {
-			res.json("Election has ended or has not started.")
 		}
 	});
 });

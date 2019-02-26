@@ -4,8 +4,8 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/', (req,res) => {
-    res.send('index.html');
+router.get('/test', (req,res) => {
+    res.send(global.config);
 })
 
 router.get('/admin', (req,res) => {

@@ -4,15 +4,8 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const forge = require('node-forge');
-const os = require( 'os' );
-const networkInterfaces = os.networkInterfaces( );
-const config = {
-	port: 2904,
-	host: '127.0.0.1',
-	user: "multichainrpc",
-	pass: "2118a6r4"
-}
-const multichain = require("multichain-node")(config);
+
+const multichain = require("multichain-node")(global.config);
 const Rep = require('../models/representative');
 const http = require('http');
 

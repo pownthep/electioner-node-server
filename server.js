@@ -10,7 +10,18 @@ const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
-mongoose.connect('mongodb://electioner:bpegRnN97qtQT9Ce6XmrNNs@35.240.145.80/electioner');
+mongoose.connect
+(
+  'mongodb+srv://electioner:2118a6r4@cluster0-ypngq.mongodb.net/test?retryWrites=true', // Replace with your own connection string
+  {useNewUrlParser: true}
+);
+
+global.config = {
+	port: 8000,
+	host: '127.0.0.1', // Use the IP of the machine you are running MultiChain on.
+	user: "multichainrpc",
+	pass: "12345678"
+}
 const db = mongoose.connection;
 
 // Check connection

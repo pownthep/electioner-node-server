@@ -6,22 +6,15 @@ const Rep = require('../models/representative');
 const Party = require('../models/party');
 const Election = require('../models/election');
 const qrcode = require('qrcode');
-const os = require( 'os' );
-const networkInterfaces = os.networkInterfaces( );
-const config = {
-	port: 2904,
-	host: '127.0.0.1',
-	user: "multichainrpc",
-	pass: "2118a6r4"
-}
-const multichain = require("multichain-node")(config);
+
+const multichain = require("multichain-node")(global.config);
 
 router.get('/admin', (req,res) => {
     res.sendFile('/index.html');
 })
 
 router.get('/app', (req,res) => {
-    res.sendFile('/electioner.apk');
+    res.sendFile('./static/electioner.apk');
 })
 
 router.get('/list/elections', (req,res) => {
