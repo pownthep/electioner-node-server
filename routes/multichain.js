@@ -60,6 +60,7 @@ router.get('/count/:id', async (req, res) => {
 		});
 		for (const key in reps) {
 			let rep = await Rep.findById(key);
+			if( !rep ) continue;
 			rep['votes'] = reps[key];
 			data.push(rep);
 		}
