@@ -34,15 +34,15 @@ let representativeSchema = mongoose.Schema({
 
 let Representative = module.exports = mongoose.model('Representative', representativeSchema);
 
-module.exports.getReps = function(callback) {
-    Representative.find(callback);
+module.exports.getReps = function () {
+  return Representative.find();
 }
-module.exports.getRepByDistrict = function(district,callback){
-	var query = {district: district};
-	Representative.find(query, callback);
+module.exports.getRepByDistrict = function (district) {
+  var query = { district: district };
+  return Representative.find(query);
 }
 
-module.exports.getRepByParty = function(party,callback){
-	var query = {party: party};
-	Representative.find(query, callback);
+module.exports.getRepByParty = function (party) {
+  var query = { party: party };
+  return Representative.find(query);
 }

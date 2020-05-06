@@ -18,7 +18,7 @@ let keypairSchema = mongoose.Schema({
 
 let Keypair = module.exports = mongoose.model('Keypair', keypairSchema);
 
-module.exports.getKeyByStreamName = function(streamName,callback){
-    let query = {streamName:streamName}
-    Keypair.findOne(query,callback);
+module.exports.getKeyByStreamName = function (streamName) {
+  let query = { streamName: streamName }
+  return Keypair.findOne(query);
 }

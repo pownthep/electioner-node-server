@@ -11,397 +11,95 @@ const BigInteger = require('jsbn').BigInteger;
 
 const multichain = require("multichain-node")(global.config);
 const axios = require('axios');
+const util = require('util');
+const publish = util.promisify(multichain.publish);
 
 //Variables
-let n = '63643836349122878110314948763039607655658373514564579581533705313808805192463';
-let lambda = "31821918174561439055157474381519803827571165229892378477650320364876810303840";
-let bits = 256;
-let pub = new paillier.publicKey(bits, new BigInteger(n));
-let priv = new paillier.privateKey(new BigInteger(lambda), pub);
-let md = forge.md.sha1.create();
+const n = '63643836349122878110314948763039607655658373514564579581533705313808805192463';
+const lambda = "31821918174561439055157474381519803827571165229892378477650320364876810303840";
+const bits = 256;
+const pub = new paillier.publicKey(bits, new BigInteger(n));
+const priv = new paillier.privateKey(new BigInteger(lambda), pub);
+const md = forge.md.sha1.create();
 md.update('sign this', 'utf8');
-
-//Routes
-// router.get('/result/:electionname', (req,res) => {
-// 	let final = [];
-// 	let responses = [];
-// 	axios.all([
-// 		axios.get('http://localhost:8080/users/decrypt/'+req.params.electionname),
-// 		axios.get('http://localhost:8080/users/decrypt/'+req.params.electionname),
-// 		axios.get('http://localhost:8080/users/decrypt/'+req.params.electionname)
-//   	]).then(axios.spread((response1, response2, response3) => {
-// 		final = response1.data;
-// 		responses.push(response2.data, response3.data);
-// 		let i = 0;
-// 		for(let response of responses) {
-// 			for(let key in response[0]) {
-// 				for(let i = 0; i < response[0][key].length; i++) {
-// 					final[0][key][i].votes+=response[0][key][i].votes
-// 				}
-// 			}
-// 			for(let key in response[1]) {
-// 				final[1][key]+=response[1][key];
-// 			}
-// 			i++;
-// 			if(i==responses.length) {
-// 				let tmp = {};
-// 				let j = 0;
-// 				let length = Object.keys(final[0]).length;
-// 				for(let key in final[0]) {
-// 					let district = {
-// 						district: key.split(' ')[1]+' '+key.split(' ')[2],
-// 						candidates: final[0][key]
-// 					}
-// 					if(!tmp[key.split(' ')[0]]) tmp[key.split(' ')[0]] = [district];
-// 					else tmp[key.split(' ')[0]].push(district);
-// 					j++;
-// 					if(j==length) {
-// 						final[0] = tmp;
-// 						res.json(final);
-// 					}
-// 				}
-// 			}
-// 		}
-// 	})).catch(error => {
-// 			console.log(error);
-// 	});
-// });
-
-router.get('/result/latest', (req,res) => {
-	Election.findOne().sort({$natural:-1}).exec((err, data)=>{
-		if(err) res.sendStatus(500);
-		if(!data.active) {
-			let final = [];
-			let responses = [];
-			axios.all([
-				axios.get('http://35.229.127.39:8080/users/decrypt/'+data.name),
-				// axios.get('http://35.226.78.98:8080/users/decrypt/'+data.name),
-				// axios.get('http://35.226.162.109:8080/users/decrypt/'+data.name),
-				// axios.get('http://35.188.154.143:8080/users/decrypt/'+data.name),
-				// axios.get('http://35.232.59.156:8080/users/decrypt/'+data.name),
-				// axios.get('http://35.192.90.156:8080/users/decrypt/'+data.name)
-			  ]).then(axios.spread((response1/*,response2,response3,response4,response5,response6*/) => {
-				responses.push(response1.data/*,response2.data,response3.data,response4.data,response5.data,response6.data*/);
-				for(let i = 0; i < responses.length; i++) {
-					if(responses[i].length == 2) {
-						if(final.length == 0) {
-							final = responses[i];
-						}
-						else {
-							for(let district in responses[i][0]) {
-								if(!final[0][district]) {
-									final[0][district] = responses[i][0][district]
-								}
-								else {
-									for(let candidate in district) {
-										final[0][district][candidate] += responses[i][0][district][candidate];
-									}
-								}						
-							}
-							for(let key in responses[i][1]) {
-								//console.log();
-								final[1][key]+=responses[i][1][key];
-							}
-						}
-					}
-					if(i==responses.length-1) {
-						if(final.length == 2) {
-							//console.log(final[0]);
-							let tmp = {};
-							let j = 0;
-							let length = Object.keys(final[0]).length;
-							for(let key in final[0]) {
-								let district = {
-									district: key.split(' ')[1]+' '+key.split(' ')[2],
-									candidates: final[0][key]
-								}
-								if(!tmp[key.split(' ')[0]]) tmp[key.split(' ')[0]] = [district];
-								else tmp[key.split(' ')[0]].push(district);
-								j++;
-								if(j==length) {
-									final[0] = tmp;
-									res.json(final);
-								}
-							}
-						}
-						else {
-							res.json(final);
-						}
-					}
-				}
-			})).catch(error => {
-					console.log(error);
-			});
-		}
-		else {
-			res.json("Unable to retrieve results because election is still active.");
-		}
-	})
-	
-});
-
-
-//Routes
-router.get('/key', (req, res) => {
-	res.json({
-		bits: bits,
-		n: n,
-	})
-})
-
-router.get('/decrypt/:name', (req, res) => {
-	var result = [];
-	var candidate = {};
-	var party = {};
-	let sum = {};
-	multichain.getAddresses({},(err, addresses) => {
-		if(err) res.sendStatus(500);
-		else {
-			multichain.listStreamPublisherItems({
-				stream: req.params.name,
-				address: addresses[0],
-				count: 100000000000
-			}, (err, ballots) => {
-				if (err) {
-					res.json("There is error");
-					console.log(err);
-				}
-				if(ballots && ballots.length > 0) {
-					for(let i = 0; i < ballots.length; i++) {
-						let obj = forge.util.hexToBytes(ballots[i].data);
-						obj = JSON.parse(obj);
-						for(let key in obj) {
-							if(sum[key]) {
-								sum[key] = pub.add(new BigInteger(obj[key]), sum[key]);
-							}
-							else{
-								sum[key] = new BigInteger(obj[key]);
-							}
-						}
-						if (i==ballots.length-1) {
-							for(let key in sum) {
-								sum[key] = priv.decrypt(sum[key]).toString(10);
-							}
-							var j = 0;
-							var length = Object.keys(sum).length;
-							for (var key in sum) {
-								Rep.findById(key, function(err,rep) {
-									if(err) {
-										res.json("Error");
-										console.log(err);
-									}
-									else if(rep) {
-										//candidate[rep.district] = parseInt(sum[rep._id]);
-										if(!candidate[rep.district]) {
-											let tmp = {};
-											tmp[rep.fname+" "+rep.lname] = parseInt(sum[rep._id]);
-											candidate[rep.district] = tmp;
-										}
-										else {
-											candidate[rep.district][rep.fname+" "+rep.lname] = parseInt(sum[rep._id]);
-										}
-										
-										if (party[rep.party]) {
-											party[rep.party] = parseInt(party[rep.party]) + parseInt(sum[rep._id]);
-										}
-										else {
-											party[rep.party] = parseInt(sum[rep._id]);
-										}
-										j++;
-										if(j === length) {
-											result.push(candidate);
-											result.push(party);
-											res.json(result);	
-										}
-									}
-									else {
-										j++;
-										if(j === length) {
-											result.push(candidate);
-											result.push(party);
-											res.json(result);	
-										}
-									}
-								});
-							}
-						}
-					}
-				}
-				else {
-					res.json([]);
-				}
-			});
-		}
-	});
-	
-});
+const address = "16exXAYvaAuX6Cu6cfXipMBT2t45euAvXmWhv7";
 
 //Register user
-router.post('/register', (req,res) => {
-	Election.findOne().sort({$natural:-1}).exec((err, data)=>{
-		if(err) res.sendStatus(500);
-		if(!data.active) {
-			try{
-				let publicKey = forge.pki.publicKeyFromPem(req.body.key);
-				let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
-				User.getUserByKey(key, (err, user) => {
-					if (err) {
-						res.sendStatus(500);
-						console.log(err);
-					}
-					if (!user) {
-						let newUser = new User({
-							pubKey: key,
-							district: req.body.district,
-							voted: 0
-			
-						})
-						User.createUser(newUser, (err, user) => {
-							if(err) {
-								console.log(err);
-								res.json(err);
-							}
-							else {
-								console.log(user);
-								res.json("User is verified.");
-							}
-						})
-					}
-					else {
-						res.send("User already exist");
-					}
-				});
-			}
-			catch(e) {
-				res.sendStatus(500);
-			}		
-		}
+router.post('/register', async (req, res) => {
+	try {
+		const publicKey = forge.pki.publicKeyFromPem(req.body.key);
+		const exist = await User.getUserByKey(forge.pki.publicKeyToPem(publicKey));
+		if (exist) { res.json("User already exist"); return; }
 		else {
-			res.json("Registration period has ended");
+			const newUser = new User({
+				pubKey: forge.pki.publicKeyToPem(publicKey),
+				district: req.body.district,
+				voted: false
+			})
+			const user = await User.createUser(newUser);
+			res.json(user);
 		}
-	});
+	} catch (e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 //Login user
-router.post('/login', (req,res) => {
-	Election.findOne().sort({$natural:-1}).exec((err, data)=>{
-		console.log(data);
-		if(err) res.sendStatus(500);
-		if(data == null) res.json("Election has ended or has not started.")
+router.post('/login', async (req, res) => {
+	try {
+		const query = { active: true };
+		const started = await Election.findOne(query);
+		let user = '';
+		const publicKey = forge.pki.publicKeyFromPem(req.body.key);
+
+		if (!started) { res.json("Election has ended or has not started."); return; }
+		if (!req.body.key) { res.json("User does not exist"); return; }
+		user = await User.getUserByKey(forge.pki.publicKeyToPem(publicKey));
+		if (!user) res.json("User does not exist");
+		else if (user.voted) res.json("You're already voted.");
 		else {
-			if(data.active & !data.ended) {
-				try {
-					let publicKey = forge.pki.publicKeyFromPem(req.body.key);
-					let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
-					User.getUserByKey(key, (err, user) => {
-						if (err) {
-							res.sendStatus(500);
-						}
-						if(user) {
-							if(user.voted == 0) {
-								Rep.getRepByDistrict(user.district, (err, reps) => {
-									if(err) {
-										console.log(err);
-										res.sendStatus(500)
-									}
-									if(reps.length > 0) {
-										console.log(7);
-										res.json(reps);
-									}
-									else {
-										console.log(1);
-										res.json("No representatives in your district.");
-									}
-								})
-							}
-							else {
-								console.log(2);
-								res.json("You're already voted.");
-							}
-						}
-						else {
-							console.log(user);
-							res.json("User does not exist");
-							console.log("User does not exist");
-						}
-					});
-				}
-				catch(e) {
-					console.log(3);
-					res.sendStatus(500);
-				}
-			}
-			else {
-				res.json("Election has ended or has not started.")
-			}
+			console.log(user.pubKey);
+			const reps = await Rep.getRepByDistrict(user.district);
+			if (reps.length === 0) { res.json("No representatives in your district."); return; }
+			res.json(reps);
 		}
-	});
+
+	} catch (e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 //publishFrom: ["from", "stream", "key", "data"]
-router.post('/vote', (req,res) => {
-	Election.findOne({active: true}, (err, election) => {
-		if(err) res.json("Error: unable to query.");
-		else if(election) {
-			let key = req.body.key.substring(0, req.body.key.indexOf('-----END PUBLIC KEY-----')+24).replace(/(\r\n|\n|\r)/gm,"");
-			User.getUserByKey(key, (err, user) => {
-				if(err) res.sendStatus(500);
-				if(user && user.voted == 0) {
-					var signature = req.body.signature;
-					try {
-						var publicKey = forge.pki.publicKeyFromPem(key);
-						var legit = publicKey.verify(md.digest().bytes(), signature);
-						if (legit) {
-							multichain.getAddresses({
+router.post('/vote', async (req, res) => {
+	try {
+		const publicKey = forge.pki.publicKeyFromPem(req.body.key);
+		const key = forge.pki.publicKeyToPem(publicKey);
+		const election = await Election.findOne({ active: true });
+		if (!election) { res.json("Election has ended or has not started."); return; }
 
-							},(err, addresses) => {
-								if(err) res.sendStatus(500);
-								else {
-									console.log(election.name);
-									multichain.publishFrom({
-										from: addresses[0],
-										stream: election.name,
-										key: user.district.split(" ")[0],
-										data: req.body.data
-									}, (err, response) => {
-										if(err) {
-											res.json(err);
-											console.log(err);
-										}
-										else {
-											var query = {pubKey:key}
-											user.voted = 1;
-											User.updateOne(query, user, function(err, user){
-												if(err){
-													console.log(err);
-													res.json(err);
-												}
-												else {
-													res.json(response);
-												}
-											});							
-										}
-									})												
-								}
-							})
-						}
-						else {
-							res.json("Aunthentication failed.");
-						}
-					}
-					catch (e) {
-						res.json("Aunthentication failed.");
-					}
-				}
-				else {
-					res.json("Already voted!");
-				}
-			});			
-		}
+		const user = await User.getUserByKey(key);
+		if (!user) res.json("User does not exist");
+		else if (user.voted) res.json("You're already voted.");
 		else {
-			res.sendStatus(500);
+			const signature = req.body.signature;
+			
+			const authenticated = publicKey.verify(md.digest().bytes(), signature);
+			if (!authenticated) { res.json("Aunthentication failed."); return; }
+			const voted = await publish({
+				stream: election.name,
+				key: 'key',
+				data: req.body.data
+			});
+			const updated = await user.update({ voted: true });
+			res.json(voted);
 		}
-	});
+
+	} catch (e) {
+		console.log(e);
+		res.sendStatus(500);
+	}
 });
 
 module.exports = router;

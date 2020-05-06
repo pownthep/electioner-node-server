@@ -18,6 +18,6 @@ let districtSchema = mongoose.Schema({
 
 let District = module.exports = mongoose.model('District', districtSchema);
 
-module.exports.getDistrict = function(callback){
-    District.find(callback);
+module.exports.getDistrict = function () {
+  return District.find();
 }

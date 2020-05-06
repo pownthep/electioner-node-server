@@ -6,377 +6,278 @@ const Rep = require('../models/representative');
 const Party = require('../models/party');
 const Election = require('../models/election');
 const qrcode = require('qrcode');
+const util = require('util')
+
 
 const multichain = require("multichain-node")(global.config);
 
-router.get('/admin', (req,res) => {
+router.get('/admin', (req, res) => {
     res.sendFile('/index.html');
-})
+});
 
-router.get('/app', (req,res) => {
-    res.sendFile('./static/electioner.apk');
-})
+router.get('/app', (req, res) => {
+    res.sendFile('/static/electioner.apk');
+});
 
-router.get('/list/elections', (req,res) => {
-    Election.find((err, elections) => {
-        if(err) res.sendStatus(500);
-        else res.json(elections);
-    });
+router.get('/list/elections', async (req, res) => {
+    try {
+        const elections = await Election.find();
+        res.json(elections);
+    } catch (error) {
+        res.sendStatus(500);
+    }
 });
 
 // Create an election
-router.post('/create/election', (req, res) => {
+router.post('/create/election', async (req, res) => {
     try {
-        let election = new Election({
+        const election = new Election({
             active: false,
             name: req.body.name,
             publicKey: req.body.publicKey,
             privateKey: ""
         })
-        multichain.create({
+        const create = util.promisify(multichain.create);
+        const subscribe = util.promisify(multichain.subscribe);
+        const createElection = await create({
             type: "stream",
             name: req.body.name,
             open: true
-        }, (err, txid) => {
-            if(err) {
-                console.log(err);
-                res.json(err);
-            }
-            else if(txid){
-                election.save(election, (err, election) => {
-                    if(err) res.json("Error: unable to save election info.");
-                    else res.json("Success: election has been saved.");
-                })
-            }
         });
+        const subscribeStream = await subscribe({stream: req.body.name});
+        const saved = await election.save();
+        res.json(saved);
     }
-    catch(e) {
-        console.log(e); 
+    catch (e) {
+        console.log(e);
+        res.sendStatus(500);
     }
 });
 
 //Closed and set decryption for an election
-router.post('/set/key', (req, res) => {
+router.post('/set/key', async (req, res) => {
     try {
-        let key = {
+        const key = {
             privateKey: req.body.privateKey
         }
-        let query = {name:req.body.name}
-        Election.updateOne(query, key, function(err, election){
-            if(err){
-                console.log(err);
-                res.json("Error: unable to set key.");
-            }
-            else if(election){
-                res.json(election);
-            }
-            else {
-                res.sendStatus(500);
-            }
-        });
+        const query = { name: req.body.name }
+        const newKey = await Election.updateOne(query, key);
+        res.json(newKey);
     }
-    catch(e) {
-        console.log(e);
-        res.sendStatus(500);        
-    }
-});
-
-router.post('/election/start', (req,res) => {
-    try {
-        let query = {name:req.body.name};
-        Election.updateOne(query, {active: true}, (err, election) => {
-            if(err) {
-                res.sendStatus(500);
-            }
-            else if(election) res.json(req.body.name+" started.");
-            else res.sendStatus(500);
-        });
-    }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
-router.post('/election/stop', (req,res) => {
+router.post('/election/start', async (req, res) => {
     try {
-        let query = {name:req.body.name};
-        Election.updateOne(query, {active: false}, (err, election) => {
-            if(err) {
-                res.sendStatus(500);
-            }
-            else if(election) res.json(req.body.name+" stopped.");
-            else res.sendStatus(500);
-    
-        });
+        const query = { name: req.body.name };
+        const started = await Election.updateOne(query, { active: true });
+        res.json(started);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
-router.post('/add_rep', (req,res) => {
+router.post('/election/stop', async (req, res) => {
+    try {
+        const query = { name: req.body.name };
+        const stopped = await Election.updateOne(query, { active: false });
+        res.json(stopped);
+    }
+    catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/add_rep', async (req, res) => {
     try {
         var newRep = new Rep(
             {
-                fname : req.body.fname,
-                lname : req.body.lname,
-                dob : req.body.dob,
-                party : req.body.party,
-                district : req.body.district,
-                url : req.body.url
+                fname: req.body.fname,
+                lname: req.body.lname,
+                dob: req.body.dob,
+                party: req.body.party,
+                district: req.body.district,
+                url: req.body.url
             }
         );
-        newRep.save((err, rep) => {
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(rep);
-        });
+        const rep = await newRep.save();
+        res.json(rep);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Add a party
-router.post('/add_party', (req,res) => {
+router.post('/add_party', async (req, res) => {
     try {
-        var newParty = new Party({
+        const newParty = new Party({
             name: req.body.name,
             number: req.body.number,
-            url: req.body.url}
+            url: req.body.url
+        }
         );
-        newParty.save((err, party) => {
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(party);
-        });
+        const party = await newParty.save();
+        res.json(party);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Get a list of representatives
-router.get('/rep', (req,res) => {
+router.get('/rep', async (req, res) => {
     try {
-        Rep.getReps(function(err, reps){
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(reps);
-        });
+        const reps = await Rep.getReps();
+        res.json(reps);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Get a representative by id
-router.get('/rep/:id', function(req,res){
+router.get('/rep/:id', async (req, res) => {
     try {
-        Rep.findById(req.params.id, function(err,rep) {
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-          else res.json(rep);
-        });
+        const rep = await Rep.findById(req.params.id);
+        res.json(rep);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Get a representative by area
-router.get('/area/:id', function(req,res){
+router.get('/area/:id', async function (req, res) {
     try {
-        Rep.getRepByDistrict(req.params.id, "แพร่", function(err,rep) {
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(rep);
-        });
+        const rep = await Rep.getRepByDistrict(req.params.id);
+        res.json(rep);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 // Get a party by id
-router.get('/party/:id', function(req,res){
+router.get('/party/:id', async (req, res) => {
     try {
-        Party.findById(req.params.id, function(err,party) {
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(party);
-        });
+        const party = await Party.findById(req.params.id);
+        res.json(party);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Get a list of parties
-router.get('/party', (req,res) => {
+router.get('/party', async (req, res) => {
     try {
-        Party.getParties(function(err, parties){
-            if(err) {
-                res.json(err);
-                console.log(err);
-            }
-            else res.json(parties);
-        })
+        const parties = await Party.getParties();
+        res.json(parties);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Query reps by party name
-router.post('/listreps', (req,res) => {
+router.post('/listreps', async (req, res) => {
     try {
-        if(req.body.party) {
-            Rep.getRepByParty(req.body.party,function(err, reps){
-                if(err) {
-                    res.json(err);
-                    console.log(err);
-                }
-                else res.json(reps);
-            })
-        }
-        else {
-            res.json("Error");
-        }
+        const reps = await Rep.getRepByParty(req.body.party);
+        res.json(reps);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Delete a representative
-router.delete('/rep/:id', function(req,res){
+router.delete('/rep/:id', async (req, res) => {
     try {
-        let query = {_id:req.params.id}
-        Rep.deleteOne(query,function(err, rep){
-            if(err){
-                console.log(err);
-                res.json(err);
-            }
-            else {
-                res.json(rep);
-            }
-        });
+        const query = { _id: req.params.id }
+        const deleted = await Rep.deleteOne(query);
+        res.json(deleted);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Delete party
-router.delete('/party/:id', function(req,res){
+router.delete('/party/:id', async (req, res) => {
     try {
-        let query = {_id:req.params.id}
-        Party.deleteOne(query,function(err, party){
-            if(err){
-                console.log(err);
-                res.json(err);
-            }
-            else {
-                res.json(party);
-            }
-        });
+        const query = { _id: req.params.id }
+        const deleted = await Party.deleteOne(query);
+        res.json(deleted);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Update a representative
-router.post('/rep/edit/:id', function(req,res){
+router.post('/rep/edit/:id', async (req, res) => {
     try {
-        var newRep = 
+        const newRep =
         {
-            fname : req.body.fname,
-            lname : req.body.lname,
-            dob : req.body.dob,
-            party : req.body.party,
-            district : req.body.district,
-            url : req.body.url
+            fname: req.body.fname,
+            lname: req.body.lname,
+            dob: req.body.dob,
+            party: req.body.party,
+            district: req.body.district,
+            url: req.body.url
         };
-        var query = {_id:req.params.id}
-
-        Rep.updateOne(query, newRep, function(err, rep){
-            if(err){
-                console.log(err);
-                res.json(err);
-            }
-            else {
-                res.json(rep);
-            }
-        });
+        const query = { _id: req.params.id }
+        const rep = await Rep.updateOne(query, newRep);
+        res.json(rep);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
 //Update a party
-router.post('/party/edit/:id', function(req,res){
+router.post('/party/edit/:id', async (req, res) => {
     try {
-        var newParty = {
+        const newParty = {
             name: req.body.name,
             number: req.body.number,
             url: req.body.url
         };
-        var query = {_id:req.params.id}
-        
-        Party.updateOne(query, newParty, function(err, party){
-            if(err){
-                console.log(err);
-                res.json(err);
-            }
-            else {
-                res.json(party);
-            }
-        });
+        const query = { _id: req.params.id }
+        const party = await Party.updateOne(query, newParty);
+        res.json(party);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
-router.post('/qr', (req, res) => {
+router.post('/qr', async (req, res) => {
     try {
         const data = req.body.data;
-        run().catch(error => console.error(error.stack));
-        async function run() {
-            const response = await qrcode.toDataURL(data);
-            res.json(response);
-        }
+        const qrImg = await qrcode.toDataURL(data);
+        res.json(qrImg);
     }
-    catch(e) {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }

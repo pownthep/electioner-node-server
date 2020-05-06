@@ -11,19 +11,19 @@ let userSchema = mongoose.Schema({
     required: true
   },
   voted: {
-    type: Number,
-    require: true
+    type: Boolean,
+    require: true,
   }
 });
 
 let User = module.exports = mongoose.model('User', userSchema);
 
-module.exports.createUser = function(newUser, callback){
-  newUser.save(callback);
+module.exports.createUser = function (newUser) {
+  return newUser.save();
 }
 
-module.exports.getUserByKey = function(pubKey, callback){
-	var query = {pubKey: pubKey};
-	User.findOne(query, callback);
+module.exports.getUserByKey = function (pubKey) {
+  var query = { pubKey: pubKey };
+  return User.findOne(query);
 }
 

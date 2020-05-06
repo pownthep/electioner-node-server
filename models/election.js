@@ -7,8 +7,8 @@ let electionSchema = mongoose.Schema({
     required: true
   },
   name: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   },
   publicKey: {
     type: String,
@@ -22,7 +22,7 @@ let electionSchema = mongoose.Schema({
 
 let Election = module.exports = mongoose.model('Election', electionSchema);
 
-module.exports.getElection = function(name,callback){
-    let query = {name:name}
-    Election.findOne(query,callback);
+module.exports.getElection = function (name) {
+  let query = { name: name }
+  return Election.findOne(query);
 }

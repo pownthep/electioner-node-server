@@ -18,6 +18,6 @@ let partySchema = mongoose.Schema({
 
 let Party = module.exports = mongoose.model('Party', partySchema);
 
-module.exports.getParties = function(callback){
-    Party.find(callback);
+module.exports.getParties = function () {
+  return Party.find();
 }
