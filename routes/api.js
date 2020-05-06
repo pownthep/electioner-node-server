@@ -11,14 +11,6 @@ const util = require('util')
 
 const multichain = require("multichain-node")(global.config);
 
-router.get('/admin', (req, res) => {
-    res.sendFile('/index.html');
-});
-
-router.get('/app', (req, res) => {
-    res.sendFile('/static/electioner.apk');
-});
-
 router.get('/list/elections', async (req, res) => {
     try {
         const elections = await Election.find();
