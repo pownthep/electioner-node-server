@@ -10,7 +10,6 @@ const Election = require('../models/election');
 const BigInteger = require('jsbn').BigInteger;
 
 const multichain = require("multichain-node")(global.config);
-const axios = require('axios');
 const util = require('util');
 const publish = util.promisify(multichain.publish);
 

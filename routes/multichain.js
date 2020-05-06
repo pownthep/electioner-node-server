@@ -2,10 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
-
 const multichain = require("multichain-node")(global.config);
-const http = require('http');
 const util = require('util');
 const Rep = require('../models/representative');
 
