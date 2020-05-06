@@ -11,31 +11,33 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.connect
-(
-  'mongodb+srv://electioner:2118a6r4@cluster0-ypngq.mongodb.net/test?retryWrites=true', // Replace with your own connection string
-  {useNewUrlParser: true}
-);
+  (
+    'mongodb+srv://electioner:2118a6r4@cluster0-ypngq.mongodb.net/test?retryWrites=true', // Replace with your own connection string
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+  );
 
 global.config = {
-	port: 8000,
-	host: '35.190.131.98', // Use the IP of the machine you are running MultiChain on.
-	user: "multichainrpc",
-	pass: "12345678"
+  port: 8000,
+  host: '35.190.131.98', // Use the IP of the machine you are running MultiChain on.
+  user: "multichainrpc",
+  pass: "12345678"
 }
 const db = mongoose.connection;
 
 // Check connection
-db.once('open', function(){
+db.once('open', function () {
   console.log('Connected to MongoDB');
 });
 
 // Check for DB errors
-db.on('error', function(err){
+db.on('error', function (err) {
   console.log(err);
 });
 
 // Constants
-const PORT = 8080;
 
 const routes = require('./routes/index');
 const users = require('./routes/users');
@@ -58,7 +60,7 @@ app.use(cors(corsOptions));
 
 // Body Parser Middleware
 // Parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -76,18 +78,18 @@ app.use(passport.session());
 
 // Express Validator
 app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
+  errorFormatter: function (param, msg, value) {
+    var namespace = param.split('.')
+      , root = namespace.shift()
       , formParam = root;
 
-    while(namespace.length) {
+    while (namespace.length) {
       formParam += '[' + namespace.shift() + ']';
     }
     return {
-      param : formParam,
-      msg   : msg,
-      value : value
+      param: formParam,
+      msg: msg,
+      value: value
     };
   }
 }));
@@ -109,4 +111,4 @@ app.use('/users', users);
 app.use('/api', api);
 app.use('/multichain', multichain);
 
-app.listen(PORT);
+app.listen(process.env.PORT || 8080);
