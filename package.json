@@ -27,7 +27,7 @@
     "multichain-node": "^2.2.0-version1.0.4",
     "newsapi": "^2.3.0",
     "node-forge": "^0.7.6",
-    "npm": "^6.14.5",
+    "npm": "^6.14.6",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
