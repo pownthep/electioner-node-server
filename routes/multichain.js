@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -26,7 +26,7 @@ router.get('/liststreams', async (req, res) => {
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -41,7 +41,7 @@ router.get('/liststreamitems/:id', async (req, res) => {
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -63,12 +63,13 @@ router.get('/count/:id', async (req, res) => {
 			if( !rep ) continue;
 			rep['votes'] = reps[key];
 			data.push(rep);
+			console.log(data);
 		}
 		res.json(data);
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -81,7 +82,7 @@ router.get('/subscribe/:id', async (req, res) => {
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -92,7 +93,7 @@ router.get('/addresses', async (req, res) => {
 	}
 	catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 

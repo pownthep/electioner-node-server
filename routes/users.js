@@ -5,23 +5,11 @@ const router = express.Router();
 const User = require('../models/user');
 const forge = require('node-forge');
 const Rep = require('../models/representative');
-const paillier = require('jspaillier');
 const Election = require('../models/election');
-const BigInteger = require('jsbn').BigInteger;
 
 const multichain = require("multichain-node")(global.config);
 const util = require('util');
 const publish = util.promisify(multichain.publish);
-
-//Variables
-const n = '63643836349122878110314948763039607655658373514564579581533705313808805192463';
-const lambda = "31821918174561439055157474381519803827571165229892378477650320364876810303840";
-const bits = 256;
-const pub = new paillier.publicKey(bits, new BigInteger(n));
-const priv = new paillier.privateKey(new BigInteger(lambda), pub);
-const md = forge.md.sha1.create();
-md.update('sign this', 'utf8');
-const address = "16exXAYvaAuX6Cu6cfXipMBT2t45euAvXmWhv7";
 
 //Register user
 router.post('/register', async (req, res) => {
@@ -40,7 +28,7 @@ router.post('/register', async (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -66,7 +54,7 @@ router.post('/login', async (req, res) => {
 
 	} catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 
@@ -97,7 +85,7 @@ router.post('/vote', async (req, res) => {
 
 	} catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json(e.message);
 	}
 });
 

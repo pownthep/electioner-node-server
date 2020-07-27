@@ -16,7 +16,7 @@ router.get('/list/elections', async (req, res) => {
         const elections = await Election.find();
         res.json(elections);
     } catch (error) {
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -42,7 +42,7 @@ router.post('/create/election', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -58,7 +58,7 @@ router.post('/set/key', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -70,7 +70,7 @@ router.post('/election/start', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -82,7 +82,7 @@ router.post('/election/stop', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -103,7 +103,7 @@ router.post('/add_rep', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -121,7 +121,7 @@ router.post('/add_party', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -133,7 +133,7 @@ router.get('/rep', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -145,7 +145,7 @@ router.get('/rep/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -157,7 +157,7 @@ router.get('/area/:id', async function (req, res) {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -169,7 +169,7 @@ router.get('/party/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -181,7 +181,7 @@ router.get('/party', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -193,7 +193,7 @@ router.post('/listreps', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -206,7 +206,7 @@ router.delete('/rep/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -219,7 +219,7 @@ router.delete('/party/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -241,7 +241,7 @@ router.post('/rep/edit/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -259,7 +259,7 @@ router.post('/party/edit/:id', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
@@ -271,7 +271,7 @@ router.post('/qr', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json(e.message);
     }
 });
 
