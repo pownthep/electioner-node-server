@@ -10,6 +10,8 @@ const Election = require('../models/election');
 const multichain = require("multichain-node")(global.config);
 const util = require('util');
 const publish = util.promisify(multichain.publish);
+const md = forge.md.sha1.create();	
+md.update('sign this', 'utf8');
 
 //Register user
 router.post('/register', async (req, res) => {
