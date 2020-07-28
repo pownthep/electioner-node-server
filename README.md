@@ -14,5 +14,5 @@
 - List blockchain stream - [Demo](https://electioner-heroku.herokuapp.com/multichain/liststreams)
 - Count votes - [Demo](https://electioner-heroku.herokuapp.com/multichain/count/Thai%20Election%202069) & [Demo with UI](https://electioner-frontend-client.now.sh/result)
 - List stream items (votes) - [Demo](https://electioner-heroku.herokuapp.com/multichain/liststreamitems/Thai%20Election%202069)
-- Handle user login - [Download app to demo](https://github.com/pownthep/electioner-mobile/blob/master/release/app-release.apk)
-- Insert vote data into blockchain - [Download app to demo](https://github.com/pownthep/electioner-mobile/blob/master/release/app-release.apk)
+- Handle user login - [Download app to demo](https://electioner-frontend-client.now.sh)
+- Insert vote data into blockchain - [Download app to demo](https://electioner-frontend-client.now.sh/)

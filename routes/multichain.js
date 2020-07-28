@@ -63,7 +63,6 @@ router.get('/count/:id', async (req, res) => {
 			if( !rep ) continue;
 			rep['votes'] = reps[key];
 			data.push(rep);
-			console.log(data);
 		}
 		res.json(data);
 	}
