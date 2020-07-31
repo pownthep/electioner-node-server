@@ -16,7 +16,7 @@ mongoose.connect
 
 global.config = {
   port: 6474,
-  host: '35.190.131.98', // Use the IP of the machine you are running MultiChain on.
+  host: '35.196.230.202', // Use the IP of the machine you are running MultiChain on.
   user: "multichainrpc",
   pass: "12345678"
 }
