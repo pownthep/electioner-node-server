@@ -15,7 +15,7 @@
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.12",
     "multichain-node": "^2.2.0-version1.0.4",
-    "node-forge": "^0.7.6",
+    "node-forge": "^0.10.0",
     "qrcode": "^1.4.4"
   }
 }
